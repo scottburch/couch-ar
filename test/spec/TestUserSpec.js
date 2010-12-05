@@ -15,6 +15,9 @@ describe('init() method', function() {
         asyncSpecWait();
     });
 
+    it('adds the domain constructors to the domain object', function() {
+        expect(domain.TestUser).toBeDefined();
+    })
 
 
 
@@ -83,4 +86,4 @@ describe('TestUser', function() {
         asyncSpecWait();
     });
 
-})
+});
