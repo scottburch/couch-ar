@@ -26,18 +26,16 @@ to the jasmin-node documentation.  I have included only enough to run the
 tests.
 
 The first step is to run the init method to generate the database and read
-your domain files.  After running init() the domain constructors are available
-in the domain object (ex: domain.TestUser)
+your domain files.
 
-        var domain = require('couch-ar');
-        domain.init({
+        require('couch-ar').init({
             dbName: 'couch-ar-test',
             root: __dirname + '../testDomain'
         }, someCallback);
 
 Next, create your domain files like this:
 
-        require('couch-ar');
+        var domain = require('couch-ar');
 
         exports.TestUser = domain.create('TestUser',{
             properties:{
@@ -56,6 +54,11 @@ Next, create your domain files like this:
 
 Notice that I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
+
+After running init() the domain constructors are available from the couch-ar object.
+
+    var domain = require('couch-ar');
+    domain.TestUser.create({})
 
 
 ## Before Hooks
@@ -97,6 +100,11 @@ Every property gets a findBy or findAllBy method.  The usage is pretty simple:
 
     domain.TestUser.findAllByUsername('scott', function(user){ // called with the user object })
 
+
+## properties
+
+id = the DB id
+rev = the DB revision
 
 
 ## License

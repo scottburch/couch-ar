@@ -4,7 +4,7 @@ var domain;
 
 describe('init() method', function() {
     it('creates db', function() {
-        domain = require('couch-ar')
+        domain = require('couch-ar');
         domain.init({
             dbName: 'couch-ar-test',
             root: __dirname + '/../testDomain'
@@ -15,12 +15,9 @@ describe('init() method', function() {
         asyncSpecWait();
     });
 
-    it('adds the domain constructors to the domain object', function() {
-        expect(domain.TestUser).toBeDefined();
-    })
-
-
-
+    it('adds the domain constructors to couch-ar', function() {
+        expect(require('couch-ar').TestUser).toBeDefined();
+    });
 });
 
 
