@@ -26,16 +26,18 @@ to the jasmin-node documentation.  I have included only enough to run the
 tests.
 
 The first step is to run the init method to generate the database and read
-your domain files.
+your domain files.  After running init() the domain constructors are available
+in the domain object (ex: domain.TestUser)
 
-        require('couch-ar').init({
+        var domain = require('couch-ar');
+        domain.init({
             dbName: 'couch-ar-test',
             root: __dirname + '../testDomain'
         }, someCallback);
 
 Next, create your domain files like this:
 
-        var domain = require('couch-ar');
+        require('couch-ar');
 
         exports.TestUser = domain.create('TestUser',{
             properties:{
@@ -69,7 +71,7 @@ Simply call Domain.create({}) passing a map of parameters to add to the object. 
 parameters defined during initialization will be included in the object.
 
 example:
-    TestUser.create({username:'me', erroneous:true})
+    domain.TestUser.create({username:'me', erroneous:true})
 
 In the above example, username will be added but erroneous will not.  This is to make it
 easy to add objects in controllers that return a params map without adding garbage to your object.
@@ -93,7 +95,7 @@ Removes a document from the DB:
 
 Every property gets a findBy or findAllBy method.  The usage is pretty simple:
 
-    TestUser.findAllByUsername('scott', function(user){ // called with the user object })
+    domain.TestUser.findAllByUsername('scott', function(user){ // called with the user object })
 
 
 
