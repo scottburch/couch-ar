@@ -1,18 +1,23 @@
 
 var TestUser
+var domain;
 
-describe('SetupDatabase', function() {
+describe('init() method', function() {
     it('creates db', function() {
-        require('couch-ar').init({
+        domain = require('couch-ar')
+        domain.init({
             dbName: 'couch-ar-test',
-            root: __dirname + '../testDomain'
+            root: __dirname + '/../testDomain'
         }, function() {
             // delay so that everything can be setup
             setTimeout(asyncSpecDone, 500);
-            TestUser = require('../testDomain/TestUser').TestUser;
         });
         asyncSpecWait();
     });
+
+
+
+
 });
 
 
@@ -23,7 +28,7 @@ describe('TestUser', function() {
         var user;
         var rev;
         it('should set id and rev before callback', function() {
-            user = TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester'});
+            user = domain.TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester'});
             user.save(function(err, res) {
                 rev = user.rev;
                 expect(res.ok).toBeTruthy();
@@ -54,7 +59,7 @@ describe('TestUser', function() {
 
     describe('findByUsername() method', function() {
         it('should find user when using findByUsername', function() {
-            TestUser.findByUsername('tester', function(user) {
+            domain.TestUser.findByUsername('tester', function(user) {
                 expect(user.username).toEqual('tester');
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
@@ -66,9 +71,10 @@ describe('TestUser', function() {
 
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
-            TestUser.findAllByUsername('tester', function(users) {
+            domain.TestUser.findAllByUsername('tester', function(users) {
                 (function removeAll(user) {
-                    user.remove(function() {
+                    user.remove(function(err, res) {
+                        expect(res.ok).toBeTruthy();
                         users.length ? removeAll(users.shift()) : asyncSpecDone();
                     });
                 }(users.shift()))

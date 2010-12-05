@@ -1,8 +1,6 @@
 var cradle = require('cradle');
 var fs = require('fs');
 
-var constructors = {};
-
 var db;
 
 exports.init = function(config, callback) {
@@ -12,14 +10,24 @@ exports.init = function(config, callback) {
     db.exists(function(err, result) {
         if (result === false) {
             db.create(function() {
-                callback()
+                initDomainConstructors();
             });
         } else {
             db.viewCleanup();
             db.compact();
-            callback();
+            initDomainConstructors();
         }
     });
+
+    function initDomainConstructors() {
+        fs.readdirSync(config.root).forEach(function(filename) {
+            if(/\.js$/.test(filename)) {
+                var name = filename.substr(0, filename.lastIndexOf('.'));
+                exports[name] = require(config.root + '/' + filename)[name];
+            }
+        })
+        callback();
+    }
 }
 
 exports.create = function(name, config, constructor) {
@@ -128,8 +136,10 @@ exports.create = function(name, config, constructor) {
         that.save = function(callback) {
             that.beforeSave && that.beforeSave();
             db.save(that.id, that.serialize(), function(err, res) {
-                that.id = res.id;
-                that.rev = res.rev
+                if(res.ok) {
+                    that.id = res.id;
+                    that.rev = res.rev
+                }
                 callback(err, res);
             });
         }
@@ -138,10 +148,10 @@ exports.create = function(name, config, constructor) {
             if (that.id) {
                 db.remove(that.id, that.rev, function(err, res) {
                     that.id = err ? that.id : undefined;
-                    callback();
+                    callback(err, res);
                 });
             } else {
-                callback();
+                callback(err, res);
             }
         }
         return that;
