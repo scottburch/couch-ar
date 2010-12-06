@@ -29,11 +29,11 @@ The first step is to run the init method to generate the database and read
 your domain files.
 
         require('couch-ar').init({
-            dbName: 'couch-ar-test',
-            root: __dirname + '../testDomain'
+            dbName: 'couch-ar-test',                    // The database name - couch-ar will create the database
+            root: __dirname + '../testDomain'           // The root of the domain constructors
         }, function(db){ // passes back the cradle connection });
 
-Next, create your domain files like this:
+Next, create your domain files in ../testDomain like this:
 
         var domain = require('couch-ar');
 
