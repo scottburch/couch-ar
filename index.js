@@ -31,7 +31,7 @@ exports.init = function(config, callback) {
 }
 
 exports.create = function(name, config, constructor) {
-
+    console.log('Adding to domain: ' + name);
 
     var factory = function() {
         var c = constructor(Base());
@@ -45,12 +45,13 @@ exports.create = function(name, config, constructor) {
 
     return factory;
 
-
     function addFinders() {
         for (prop in config.properties) {
             addFindAllBy(prop);
             addFindBy(prop);
         }
+        addFindAllBy('id');
+        addFindBy('id');
 
         function addFindAllBy(prop) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
@@ -88,6 +89,10 @@ exports.create = function(name, config, constructor) {
                 map: "function(doc){if(doc.type === '" + name + "') {emit(doc." + prop + ", doc)}}"
             }
         }
+        views.id = {
+            map: "function(doc){if(doc.type === '" + name + "') {emit(doc._id, doc)}}"
+        }
+        
         db.get('_design/' + name, function(err, res) {
             if (res) {
                 db.remove('_design/' + name, function(err, res) {

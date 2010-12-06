@@ -69,6 +69,20 @@ describe('TestUser', function() {
         });
     });
 
+    describe('findById() method', function() {
+        it('should find a user using findById', function() {
+            domain.TestUser.findByUsername('tester', function(user){
+                domain.TestUser.findById(user.id, function(user){
+                    expect(user.username).toEqual('tester');
+                    expect(user.id).toBeDefined();
+                    expect(user.rev).toBeDefined();
+                    asyncSpecDone();
+                });
+            });
+            asyncSpecWait();
+        });
+    });
+
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername('tester', function(users) {
