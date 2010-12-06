@@ -31,7 +31,7 @@ your domain files.
         require('couch-ar').init({
             dbName: 'couch-ar-test',
             root: __dirname + '../testDomain'
-        }, someCallback);
+        }, function(db){ // passes back the cradle connection });
 
 Next, create your domain files like this:
 
@@ -104,6 +104,7 @@ Every property gets a findBy or findAllBy method.  The usage is pretty simple:
 ## properties
 
 id = the DB id
+
 rev = the DB revision
 
 

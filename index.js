@@ -26,7 +26,7 @@ exports.init = function(config, callback) {
                 exports[name] = require(config.root + '/' + filename)[name];
             }
         })
-        callback();
+        callback(db);
     }
 }
 
