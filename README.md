@@ -99,6 +99,7 @@ Removes a document from the DB:
 Every property gets a findBy or findAllBy method.  The usage is pretty simple:
 
     domain.TestUser.findAllByUsername('scott', function(user){ // called with the user object })
+    domain.TestUser.findById('xxxxxx', function(user){})
 
 
 ## properties
