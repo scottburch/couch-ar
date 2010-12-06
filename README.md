@@ -98,7 +98,7 @@ Removes a document from the DB:
 
 Every property gets a findBy or findAllBy method.  The usage is pretty simple:
 
-    domain.TestUser.findAllByUsername('scott', function(user){ // called with the user object })
+    domain.TestUser.findAllByUsername('scott', function(users){ // passed the user objects })
     domain.TestUser.findById('xxxxxx', function(user){})
 
 
