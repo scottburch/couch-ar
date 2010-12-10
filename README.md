@@ -13,6 +13,13 @@
 
  Please feel free to write with any comments or suggestions: scott@bulldoginfo.com
 
+## Installation
+
+I am a linux user so I placed the files in .node_libraries/couch-ar.  I am not sure how to
+install it on other operating systems.  If anyone has info on this, let me know.  I will
+look into using npm.  You can also place the files anywhere you wish and use them using
+'require' with the path to where you installed it.
+
 
 ## How to use
 

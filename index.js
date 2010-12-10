@@ -3,6 +3,11 @@ var fs = require('fs');
 
 var db;
 
+/**
+ * initialize the DB and create constructor factories
+ * @param config
+ * @param callback
+ */
 exports.init = function(config, callback) {
     callback = callback || function() {};
     db = new cradle.Connection().database(config.dbName);
@@ -30,6 +35,12 @@ exports.init = function(config, callback) {
     }
 }
 
+/**
+ * Create a domain constructor.  Use this in each domain file
+ * @param name
+ * @param config
+ * @param constructor
+ */
 exports.create = function(name, config, constructor) {
     console.log('Adding to domain: ' + name);
 
@@ -111,6 +122,9 @@ exports.create = function(name, config, constructor) {
 
     }
 
+    /**
+     * Add the create() static method to the factory
+     */
     function addCreateMethod() {
         factory.create = function(props) {
             var obj = factory();
@@ -124,6 +138,10 @@ exports.create = function(name, config, constructor) {
         }
     }
 
+    /**
+     * The base constructor that is extended by each domain constructor
+     * Contains the basic methods save/remove... 
+     */
     function Base() {
         var that = {};
 
