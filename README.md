@@ -19,6 +19,8 @@
 
 2) npm install couch-ar
 
+NOTE: You also need to install cradle
+
 
 ## How to use
 
