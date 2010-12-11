@@ -16,6 +16,7 @@
 ## Installation
 
 1) Download the index.js file and place it in .node_libraries/couch-ar.
+
 2) npm install couch-ar
 
 
