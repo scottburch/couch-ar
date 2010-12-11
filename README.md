@@ -15,10 +15,8 @@
 
 ## Installation
 
-I am a linux user so I placed the files in .node_libraries/couch-ar.  I am not sure how to
-install it on other operating systems.  If anyone has info on this, let me know.  I will
-look into using npm.  You can also place the files anywhere you wish and use them using
-'require' with the path to where you installed it.
+1) Download the index.js file and place it in .node_libraries/couch-ar.
+2) npm install couch-ar
 
 
 ## How to use
