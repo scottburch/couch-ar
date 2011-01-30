@@ -161,7 +161,7 @@ exports.create = function(name, config, constructor) {
         var that = {};
 
         that.serialize = function() {
-            var obj = Object.getOwnPropertyNames(config.properties).reduce(function(obj, prop) {
+            var obj = Object.getOwnPropertyNames(config.properties).concat(['lastUpdated','dateCreated']).reduce(function(obj, prop) {
                 obj[prop] = that[prop];
                 return obj;
             }, {});
@@ -174,6 +174,8 @@ exports.create = function(name, config, constructor) {
         that.save = function(callback) {
             that.beforeSave && that.beforeSave();
             var out = that.serialize();
+            that.dateCreated = that.dateCreated || new Date();
+            that.lastUpdated = new Date();
             db.save(that.id, that.serialize(), function(err, res) {
                 if(res.ok) {
                     that.id = res.id;

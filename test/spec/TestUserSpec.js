@@ -24,6 +24,7 @@ describe('init() method', function() {
 describe('TestUser', function() {
 
     describe('save() method', function() {
+        var dateCreated,lastUpdated;
         var user;
         var rev;
         it('should set id and rev before callback', function() {
@@ -34,6 +35,10 @@ describe('TestUser', function() {
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
                 expect(user.erroneous).toBeDefined();
+                expect(user.dateCreated).toBeDefined();
+                dateCreated = user.dateCreated;
+                expect(user.lastUpdated).toBeDefined();
+                lastUpdated = user.lastUpdated;
                 asyncSpecDone();
             });
             asyncSpecWait();
@@ -46,10 +51,11 @@ describe('TestUser', function() {
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
                 expect(rev).not.toEqual(user.rev);
+                expect(user.dateCreated).toEqual(dateCreated);
+                expect(user.lastUpdated).not.toEqual(lastUpdated);
                 asyncSpecDone();
             });
             asyncSpecWait();
-
         })
 
         it('should call beforeSave method before writing to the db', function() {
@@ -72,6 +78,8 @@ describe('TestUser', function() {
                 expect(user.username).toEqual('tester');
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
+                expect(user.dateCreated).toBeDefined();
+                expect(user.lastUpdated).toBeDefined();
                 asyncSpecDone();
             });
             asyncSpecWait();
@@ -85,6 +93,8 @@ describe('TestUser', function() {
                     expect(user.username).toEqual('tester');
                     expect(user.id).toBeDefined();
                     expect(user.rev).toBeDefined();
+                    expect(user.dateCreated).toBeDefined();
+                    expect(user.lastUpdated).toBeDefined();
                     asyncSpecDone();
                 });
             });
