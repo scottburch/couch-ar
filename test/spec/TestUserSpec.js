@@ -23,7 +23,6 @@ describe('init() method', function() {
 
 describe('TestUser', function() {
 
-
     describe('save() method', function() {
         var user;
         var rev;
@@ -82,6 +81,18 @@ describe('TestUser', function() {
             asyncSpecWait();
         });
     });
+
+
+    describe('list() method', function() {
+        it('should show records in db', function() {
+            domain.TestUser.list(function(users){
+                expect(users.length).toBeGreaterThan(0);
+            });
+        });
+    }); 
+
+
+
 
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {

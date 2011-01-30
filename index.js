@@ -63,16 +63,21 @@ exports.create = function(name, config, constructor) {
         }
         addFindAllBy('id');
         addFindBy('id');
+        addList();
+
+        function instantiateResults(res) {
+            return res.map(function(row) {
+                row.id = row._id;
+                row.rev = row._rev;
+                return factory.create(row);
+            })
+        }
 
         function addFindAllBy(prop) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
                 var url = ['_design/', name, '/_view/', prop].join('');
                 db.query('GET', url, {key:JSON.stringify(value)}, function(err, res) {
-                    callback(res.map(function(row) {
-                        row.id = row._id;
-                        row.rev = row._rev;
-                        return factory.create(row);
-                    }));
+                    callback(instantiateResults(res));
                 })
             }
         }
@@ -83,6 +88,15 @@ exports.create = function(name, config, constructor) {
                 factory['findAllBy' + upperName](value, function(results) {
                     callback(results[0]);
                 });
+            }
+        }
+
+        function addList() {
+            factory.list = function(callback) {
+                var url = ['_design/',name,'/_view/id'].join('');
+                db.query('GET',url, function(err, res) {
+                    callback(instantiateResults(res));
+                })
             }
         }
 
@@ -103,7 +117,8 @@ exports.create = function(name, config, constructor) {
         views.id = {
             map: "function(doc){if(doc.type === '" + name + "') {emit(doc._id, doc)}}"
         }
-        
+
+
         db.get('_design/' + name, function(err, res) {
             if (res) {
                 db.remove('_design/' + name, function(err, res) {
