@@ -27,12 +27,13 @@ describe('TestUser', function() {
         var user;
         var rev;
         it('should set id and rev before callback', function() {
-            user = domain.TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester'});
+            user = domain.TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester',erroneous:'xxxxxxxx'});
             user.save(function(err, res) {
                 rev = user.rev;
                 expect(res.ok).toBeTruthy();
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
+                expect(user.erroneous).toBeDefined();
                 asyncSpecDone();
             });
             asyncSpecWait();
@@ -53,7 +54,16 @@ describe('TestUser', function() {
 
         it('should call beforeSave method before writing to the db', function() {
             expect(user.fullName).toEqual('Test Tester');
-        })
+        });
+
+        it('should not save properties not on propery list', function() {
+            domain.TestUser.findByUsername('tester', function(u) {
+                expect(u.erroneous).not.toBeDefined();
+                asyncSpecDone();
+            })
+            asyncSpecWait();
+        });
+
     })
 
     describe('findByUsername() method', function() {

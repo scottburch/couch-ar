@@ -143,7 +143,7 @@ exports.create = function(name, config, constructor) {
     function addCreateMethod() {
         factory.create = function(props) {
             var obj = factory();
-            for (var n in config.properties) {
+            for (var n in props) {
                 obj[n] = props[n];
             }
             // copy ids as well
@@ -173,6 +173,7 @@ exports.create = function(name, config, constructor) {
 
         that.save = function(callback) {
             that.beforeSave && that.beforeSave();
+            var out = that.serialize();
             db.save(that.id, that.serialize(), function(err, res) {
                 if(res.ok) {
                     that.id = res.id;

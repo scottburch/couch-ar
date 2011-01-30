@@ -63,7 +63,7 @@ Next, create your domain files in ../testDomain like this:
             return that;
         });
 
-Notice that I am using Douglas Crockford's parasitic inheritance and power constructors.
+I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
 
 After running init() the domain constructors are available from the couch-ar object.
@@ -131,8 +131,4 @@ rev = the DB revision
 
 Provided under the MIT license.  In other words, do what you want with it.
 
-
-## Future Enhancements (coming soon)
-
-* validation on save
 
