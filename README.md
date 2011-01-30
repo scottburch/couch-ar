@@ -105,6 +105,13 @@ Removes a document from the DB:
     user.remove(function(err, res) {});
 
 
+## list()
+
+List all documents
+
+   user.list(function(users){});
+
+
 ## findByXxx() / findAllByXxx()
 
 Every property gets a findBy or findAllBy method.  The usage is pretty simple:
