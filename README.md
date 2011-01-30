@@ -109,7 +109,7 @@ Removes a document from the DB:
 
 List all documents
 
-   user.list(function(users){});
+   domain.TestUser.list(function(users){});
 
 
 ## findByXxx() / findAllByXxx()
