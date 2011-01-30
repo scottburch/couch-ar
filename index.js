@@ -45,7 +45,7 @@ exports.create = function(name, config, constructor) {
     console.log('Adding to domain: ' + name);
 
     var factory = function() {
-        var c = constructor(Base());
+        var c = constructor ? constructor(Base()) : Base();
         c.properties = config.properties;
         return c;
     }
