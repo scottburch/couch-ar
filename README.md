@@ -126,6 +126,10 @@ id = the DB id
 
 rev = the DB revision
 
+dateCreated = the date the object was first saved to the DB
+
+lastUpdated = the date the object was last updated
+
 
 ## License
 
