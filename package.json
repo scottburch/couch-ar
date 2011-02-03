@@ -1,0 +1,24 @@
+{
+  "name": "couch-ar",
+  "description": "active record for CouchDB",
+  "version": "0.1.1",
+  "homepage": "https://github.com/scottburch/couch-ar",
+  "author": {
+    "name": "Scott Burch",
+    "email": "scott@bulldoginfo.com"
+  },
+  "directories": {
+    "lib": ""
+  },
+  "main": "./",
+  "engines": {
+    "node": "*"
+  },
+  "_id": "couch-ar@0.1.1",
+  "_nodeSupported": true,
+  "_npmVersion": "0.2.10-1",
+  "_nodeVersion": "v0.2.4",
+  "dist": {
+    "shasum": "995d3b23f7b721bff91f822ffe6fdc5a8c8f61f0"
+  }
+}

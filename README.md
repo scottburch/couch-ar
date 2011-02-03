@@ -81,14 +81,10 @@ is saved or updated in the DB.
 ## create()
 
 couch-ar adds a static factory for constructing domain objects using a parameter map.
-Simply call Domain.create({}) passing a map of parameters to add to the object.  Only
-parameters defined during initialization will be included in the object.
+Simply call Domain.create({}) passing a map of parameters to add to the object.  
 
 example:
-    domain.TestUser.create({username:'me', erroneous:true})
-
-In the above example, username will be added but erroneous will not.  This is to make it
-easy to add objects in controllers that return a params map without adding garbage to your object.
+    domain.TestUser.create({username:'me'})
 
 
 ## save()
@@ -136,3 +132,10 @@ lastUpdated = the date the object was last updated
 Provided under the MIT license.  In other words, do what you want with it.
 
 
+## Versions
+
+Feb 2, 2011 - released V1.1
+
+   new method list()
+   properties dateCreated and lastUpdated
+   create now allows undefined properties to be added to an object
