@@ -69,8 +69,7 @@ describe('TestUser', function() {
             })
             asyncSpecWait();
         });
-
-    })
+    });
 
     describe('findByUsername() method', function() {
         it('should find user when using findByUsername', function() {

@@ -172,6 +172,7 @@ exports.create = function(name, config, constructor) {
         }
 
         that.save = function(callback) {
+            callback = callback || function() {}
             that.beforeSave && that.beforeSave();
             var out = that.serialize();
             that.dateCreated = that.dateCreated || new Date();
