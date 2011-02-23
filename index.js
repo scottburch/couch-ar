@@ -9,7 +9,8 @@ var db;
  * @param callback
  */
 exports.init = function(config, callback) {
-    callback = callback || function() {};
+    callback = callback || function() {
+    };
     db = new cradle.Connection().database(config.dbName);
 
     db.exists(function(err, result) {
@@ -26,7 +27,7 @@ exports.init = function(config, callback) {
 
     function initDomainConstructors() {
         fs.readdirSync(config.root).forEach(function(filename) {
-            if(/\.js$/.test(filename)) {
+            if (/\.js$/.test(filename)) {
                 var name = filename.substr(0, filename.lastIndexOf('.'));
                 exports[name] = require(config.root + '/' + filename)[name];
             }
@@ -52,11 +53,11 @@ exports.create = function(name, config, constructor) {
 
     // Run all of the creators
     addPropertyViews(function() {
-console.log('property views added')
+        console.log('property views added')
         addFinders(function() {
-console.log('finders added')
+            console.log('finders added')
             addCreateMethod(function() {
-console.log('create method added')                
+                console.log('create method added')
                 addViews(function() {
                     console.log('views added')
                 });
@@ -89,7 +90,7 @@ console.log('create method added')
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
                 var url = ['_design/', name, '/_view/', prop].join('');
                 db.query('GET', url, {key:JSON.stringify(value)}, function(err, res) {
-                    callback(instantiateResults(res));
+                   callback(instantiateResults(res));
                 })
             }
         }
@@ -106,7 +107,7 @@ console.log('create method added')
         function addList() {
             factory.list = function(callback) {
                 var url = ['_design/',name,'/_view/id'].join('');
-                db.query('GET',url, function(err, res) {
+                db.query('GET', url, function(err, res) {
                     callback(instantiateResults(res));
                 })
             }
@@ -120,27 +121,27 @@ console.log('create method added')
 
 
     function addViews(callback) {
-        if(!config.views) {
-            callback();
+        if (!config.views) {
+            return callback();
         }
-        db.get('_design/'+name, function(err, res) {
-            var views = res;
+
+        db.get('_design/' + name, function(err, res) {
+            var doc = res;
             Object.keys(config.views).forEach(function(viewName) {
                 var view = config.views[viewName];
-                if(view.map) {
+                if (view.map) {
                     view.map = view.map.toString();
-                    var code = "$1if doc.type==='"+name+"'{$2}}"
-                    view.map = view.map.replace(/[\n]/g,'');
+                    var code = "$1if (doc.type==='" + name + "'){$2}}"
+                    view.map = view.map.replace(/[\n]/g, '');
                     view.map = view.map.replace(/(function.*?\(\).*?{)(.*)}.*$/, code);
                 }
 
-                views[viewName] = view;
+                doc.views[viewName] = view;
             })
-            db.save('_design/'+name, views._rev, views, function(err, res) {
+            db.save('_design/' + name, doc, function(err, res) {
                 err && console.log(err);
                 callback && callback();
             })
-
         })
     }
 
@@ -169,7 +170,7 @@ console.log('create method added')
         });
 
         function saveView() {
-            db.save('_design/' + name, views, function(err, res){
+            db.save('_design/' + name, views, function(err, res) {
                 callback && callback();
             });
         }
@@ -179,7 +180,7 @@ console.log('create method added')
     /**
      * Add the create() static method to the factory
      */
-    function addCreateMethod() {
+    function addCreateMethod(callback) {
         factory.create = function(props) {
             var obj = factory();
             for (var n in props) {
@@ -190,11 +191,12 @@ console.log('create method added')
             obj.rev = obj.rev || props._rev || props.rev;
             return obj;
         }
+        callback && callback();
     }
 
     /**
      * The base constructor that is extended by each domain constructor
-     * Contains the basic methods save/remove... 
+     * Contains the basic methods save/remove...
      */
     function Base() {
         var that = {};
@@ -211,13 +213,14 @@ console.log('create method added')
         }
 
         that.save = function(callback) {
-            callback = callback || function() {}
+            callback = callback || function() {
+            }
             that.beforeSave && that.beforeSave();
             var out = that.serialize();
             that.dateCreated = that.dateCreated || new Date();
             that.lastUpdated = new Date();
             db.save(that.id, that.serialize(), function(err, res) {
-                if(res.ok) {
+                if (res.ok) {
                     that.id = res.id;
                     that.rev = res.rev
                 }
