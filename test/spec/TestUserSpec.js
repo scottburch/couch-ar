@@ -120,18 +120,28 @@ describe('TestUser', function() {
             expect(domain.TestUser.findAllByFirstOrLastName).toBeDefined();
         });
 
-        it('should return results', function() {
+        it('findAll using custom view should return results', function() {
             domain.TestUser.findAllByFirstOrLastName('Tester', function(users) {
                 expect(users.length).toBeGreaterThan(0);
                 asyncSpecDone();                
             })
             asyncSpecWait();
         });
+
+        it('find using custom view should return results', function() {
+            domain.TestUser.findByFirstOrLastName('Test', function(user){
+                expect(user).toBeDefined();
+                expect(user.lastName).toEqual('Tester');
+                asyncSpecDone();
+            });
+            asyncSpecWait();
+
+        });
     })
     
 
 
-/*    describe('remove() method', function() {
+    describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername('tester', function(users) {
                 (function removeAll(user) {
@@ -143,7 +153,7 @@ describe('TestUser', function() {
             });
         });
         asyncSpecWait();
-    }); */
+    }); 
 
 
 });
