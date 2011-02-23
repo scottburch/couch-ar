@@ -46,22 +46,27 @@ your domain files.
 
 Next, create your domain files in ../testDomain like this:
 
-        var domain = require('couch-ar');
-
-        exports.TestUser = domain.create('TestUser',{
-            properties:{
-                username: {},
-                password: {},
-                firstName:{},
-                lastName: {},
-                fullName: {}
-            }
-        }, function(that) {
-            that.beforeSave = function() {
-                that.fullName = that.firstName + ' ' + that.lastName;
-            }
-            return that;
-        });
+    var domain = require('couch-ar');
+    exports.TestUser = domain.create('TestUser',{
+        properties:{
+            username: {},
+            password: {},
+            firstName:{},
+            lastName: {},
+            fullName: {}
+        },
+        views: {
+            firstOrLastName: {map: function(doc) {
+                emit(doc.firstName, doc);
+                emit(doc.lastName, doc);
+            }}
+        }
+    }, function(that) {
+        that.beforeSave = function() {
+            that.fullName = that.firstName + ' ' + that.lastName;
+        }
+        return that;
+    });                                                                         
 
 I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
