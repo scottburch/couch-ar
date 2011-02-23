@@ -106,14 +106,32 @@ describe('TestUser', function() {
         it('should show records in db', function() {
             domain.TestUser.list(function(users){
                 expect(users.length).toBeGreaterThan(0);
+                asyncSpecDone();
             });
         });
+        asyncSpecWait();
     }); 
 
 
 
+    describe('custom views', function() {
+        it('should add the finder', function() {
+            expect(domain.TestUser.findByFirstOrLastName).toBeDefined();
+            expect(domain.TestUser.findAllByFirstOrLastName).toBeDefined();
+        });
 
-    describe('remove() method', function() {
+        it('should return results', function() {
+            domain.TestUser.findAllByFirstOrLastName('Tester', function(users) {
+                expect(users.length).toBeGreaterThan(0);
+                asyncSpecDone();                
+            })
+            asyncSpecWait();
+        });
+    })
+    
+
+
+/*    describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername('tester', function(users) {
                 (function removeAll(user) {
@@ -125,6 +143,7 @@ describe('TestUser', function() {
             });
         });
         asyncSpecWait();
-    });
+    }); */
+
 
 });

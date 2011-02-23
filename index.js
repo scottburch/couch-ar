@@ -52,15 +52,12 @@ exports.create = function(name, config, constructor) {
     }
 
     // Run all of the creators
-    addPropertyViews(function() {
+    addViews(function() {
         console.log('property views added')
         addFinders(function() {
             console.log('finders added')
             addCreateMethod(function() {
                 console.log('create method added')
-                addViews(function() {
-                    console.log('views added')
-                });
             });
         });
     });
@@ -72,6 +69,10 @@ exports.create = function(name, config, constructor) {
         for (prop in config.properties) {
             addFindAllBy(prop);
             addFindBy(prop);
+        }
+        for (view in config.views) {
+            addFindAllBy(view);
+            addFindBy(view);
         }
         addFindAllBy('id');
         addFindBy('id');
@@ -90,7 +91,8 @@ exports.create = function(name, config, constructor) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
                 var url = ['_design/', name, '/_view/', prop].join('');
                 db.query('GET', url, {key:JSON.stringify(value)}, function(err, res) {
-                   callback(instantiateResults(res));
+                    err && console.log(err);
+                   callback(err ? [] : instantiateResults(res));
                 })
             }
         }
@@ -119,34 +121,22 @@ exports.create = function(name, config, constructor) {
         }
     }
 
-
     function addViews(callback) {
-        if (!config.views) {
-            return callback();
-        }
-
-        db.get('_design/' + name, function(err, res) {
-            var doc = res;
-            Object.keys(config.views).forEach(function(viewName) {
-                var view = config.views[viewName];
-                if (view.map) {
-                    view.map = view.map.toString();
-                    var code = "$1if (doc.type==='" + name + "'){$2}}"
-                    view.map = view.map.replace(/[\n]/g, '');
-                    view.map = view.map.replace(/(function.*?\(\).*?{)(.*)}.*$/, code);
-                }
-
-                doc.views[viewName] = view;
-            })
-            db.save('_design/' + name, doc, function(err, res) {
-                err && console.log(err);
-                callback && callback();
-            })
-        })
-    }
-
-    function addPropertyViews(callback) {
         var views = {};
+
+
+        Object.keys(config.views).forEach(function(viewName) {
+            var view = config.views[viewName];
+            if(view.map) {
+                view.map = view.map.toString();
+                var code = "$1if (doc.type==='" + name + "'){$2}}"
+                view.map = view.map.replace(/[\n]/g, '');
+                view.map = view.map.replace(/(function.*?\(.*?\).*?{)(.*)}.*$/, code);
+            }
+            views[viewName] = view;
+        });
+
+
         for (prop in config.properties) {
             views[prop] = {
                 map: "function(doc){if(doc.type === '" + name + "') {emit(doc." + prop + ", doc)}}"

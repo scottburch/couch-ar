@@ -9,8 +9,9 @@ exports.TestUser = domain.create('TestUser',{
         fullName: {}
     },
     views: {
-        firstAndLastName: {map: function() {
-            emit(doc.firstName+doc.lastName, doc);
+        firstOrLastName: {map: function(doc) {
+            emit(doc.firstName, doc);
+            emit(doc.lastName, doc);
         }}
     }
 }, function(that) {
