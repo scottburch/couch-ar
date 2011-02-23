@@ -161,8 +161,16 @@ Provided under the MIT license.  In other words, do what you want with it.
 
 ## Versions
 
-Feb 2, 2011 - released V1.1
+Feb 2, 2011 - released V0.1.1
 
    new method list()
    properties dateCreated and lastUpdated
    create now allows undefined properties to be added to an object
+
+Feb 22, 2011 - released v0.1.2
+
+   added custom views to domain constructors
+
+Feb 22, 20111 - release v0.1.3
+
+   fix bug introduced in v0.1.2 - domain constructors without custom views throw errors

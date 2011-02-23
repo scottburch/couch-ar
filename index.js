@@ -92,7 +92,7 @@ exports.create = function(name, config, constructor) {
                 var url = ['_design/', name, '/_view/', prop].join('');
                 db.query('GET', url, {key:JSON.stringify(value)}, function(err, res) {
                     err && console.log(err);
-                   callback(err ? [] : instantiateResults(res));
+                    callback(err ? [] : instantiateResults(res));
                 })
             }
         }
@@ -124,17 +124,18 @@ exports.create = function(name, config, constructor) {
     function addViews(callback) {
         var views = {};
 
-
-        Object.keys(config.views).forEach(function(viewName) {
-            var view = config.views[viewName];
-            if(view.map) {
-                view.map = view.map.toString();
-                var code = "$1if (doc.type==='" + name + "'){$2}}"
-                view.map = view.map.replace(/[\n]/g, '');
-                view.map = view.map.replace(/(function.*?\(.*?\).*?{)(.*)}.*$/, code);
-            }
-            views[viewName] = view;
-        });
+        if (config.views) {
+            Object.keys(config.views).forEach(function(viewName) {
+                var view = config.views[viewName];
+                if (view.map) {
+                    view.map = view.map.toString();
+                    var code = "$1if (doc.type==='" + name + "'){$2}}"
+                    view.map = view.map.replace(/[\n]/g, '');
+                    view.map = view.map.replace(/(function.*?\(.*?\).*?{)(.*)}.*$/, code);
+                }
+                views[viewName] = view;
+            });
+        }
 
 
         for (prop in config.properties) {
