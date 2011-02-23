@@ -7,6 +7,11 @@ exports.TestUser = domain.create('TestUser',{
         firstName:{},
         lastName: {},
         fullName: {}
+    },
+    views: {
+        firstAndLastName: {map: function() {
+            emit(doc.firstName+doc.lastName, doc);
+        }}
     }
 }, function(that) {
     that.beforeSave = function() {

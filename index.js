@@ -50,13 +50,24 @@ exports.create = function(name, config, constructor) {
         return c;
     }
 
-    addViews();
-    addFinders();
-    addCreateMethod();
+    // Run all of the creators
+    addPropertyViews(function() {
+console.log('property views added')
+        addFinders(function() {
+console.log('finders added')
+            addCreateMethod(function() {
+console.log('create method added')                
+                addViews(function() {
+                    console.log('views added')
+                });
+            });
+        });
+    });
+
 
     return factory;
 
-    function addFinders() {
+    function addFinders(callback) {
         for (prop in config.properties) {
             addFindAllBy(prop);
             addFindBy(prop);
@@ -64,6 +75,7 @@ exports.create = function(name, config, constructor) {
         addFindAllBy('id');
         addFindBy('id');
         addList();
+        callback();
 
         function instantiateResults(res) {
             return res.map(function(row) {
@@ -107,7 +119,32 @@ exports.create = function(name, config, constructor) {
     }
 
 
-    function addViews() {
+    function addViews(callback) {
+        if(!config.views) {
+            callback();
+        }
+        db.get('_design/'+name, function(err, res) {
+            var views = res;
+            Object.keys(config.views).forEach(function(viewName) {
+                var view = config.views[viewName];
+                if(view.map) {
+                    view.map = view.map.toString();
+                    var code = "$1if doc.type==='"+name+"'{$2}}"
+                    view.map = view.map.replace(/[\n]/g,'');
+                    view.map = view.map.replace(/(function.*?\(\).*?{)(.*)}.*$/, code);
+                }
+
+                views[viewName] = view;
+            })
+            db.save('_design/'+name, views._rev, views, function(err, res) {
+                err && console.log(err);
+                callback && callback();
+            })
+
+        })
+    }
+
+    function addPropertyViews(callback) {
         var views = {};
         for (prop in config.properties) {
             views[prop] = {
@@ -132,7 +169,9 @@ exports.create = function(name, config, constructor) {
         });
 
         function saveView() {
-            db.save('_design/' + name, views);
+            db.save('_design/' + name, views, function(err, res){
+                callback && callback();
+            });
         }
 
     }
