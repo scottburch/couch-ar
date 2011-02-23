@@ -127,6 +127,33 @@ dateCreated = the date the object was first saved to the DB
 lastUpdated = the date the object was last updated
 
 
+## custom views
+
+You can also add custom views to any domain constructor
+
+The following example will create a view to find a user by first or last name:
+
+    exports.TestUser = domain.create('TestUser',{
+        properties:{
+            username: {},
+            password: {},
+            firstName:{},
+            lastName: {},
+        },
+        views: {
+            firstOrLastName: {map: function(doc) {
+                emit(doc.firstName, doc);
+                emit(doc.lastName, doc);
+            }}
+        }
+    });
+
+This code will also add static finders:
+
+    domain.TestUser.findAllByFirstOrLastName('Test',function() {});
+    domain.TestUser.findByFirstOrLastName('Tester',function() {});
+
+
 ## License
 
 Provided under the MIT license.  In other words, do what you want with it.
