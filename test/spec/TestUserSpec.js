@@ -167,7 +167,6 @@ describe('TestUser', function() {
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername(['tester','testerZ'], function(users) {
-console.log(users);
                 (function removeAll(u) {
                     u.remove(function(err, res) {
                         expect(res.ok).toBeTruthy();
