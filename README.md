@@ -121,6 +121,10 @@ Every property gets a findBy or findAllBy method.  The usage is pretty simple:
     domain.TestUser.findById('xxxxxx', function(user){})
 
 
+    NOTE: findAllByXxx() can find documents in a range by passing an array as the value with the start and end keys
+
+    domain.TestUser.findAllByUsername(['a','aZ'], function(users) { // passed the user objects where username starts with 'a'})
+
 ## properties
 
 id = the DB id
@@ -179,3 +183,7 @@ Feb 22, 2011 - released v0.1.2
 Feb 22, 2011 - release v0.1.3
 
    fix bug introduced in v0.1.2 - domain constructors without custom views throw errors
+
+Mar 17, 2011 - release v0.1.4
+
+   added ability to do a findAllBy() with a start and end key
