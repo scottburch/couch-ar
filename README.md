@@ -66,7 +66,9 @@ Next, create your domain files in ../testDomain like this:
             that.fullName = that.firstName + ' ' + that.lastName;
         }
         return that;
-    });                                                                         
+    });
+
+NOTE: *** The name of the file must match the name passed to create ***
 
 I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
