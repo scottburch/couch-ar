@@ -45,6 +45,9 @@ exports.init = function(config, callback) {
 exports.create = function(name, config, constructor) {
     console.log('Adding to domain: ' + name);
 
+    config.properties.dateCreated = {};
+    config.properties.lastUpdated = {};
+
     var factory = function() {
         var c = constructor ? constructor(Base()) : Base();
         c.properties = config.properties;
@@ -53,11 +56,8 @@ exports.create = function(name, config, constructor) {
 
     // Run all of the creators
     addViews(function() {
-        console.log('property views added')
         addFinders(function() {
-            console.log('finders added')
             addCreateMethod(function() {
-                console.log('create method added')
             });
         });
     });
@@ -89,8 +89,15 @@ exports.create = function(name, config, constructor) {
 
         function addFindAllBy(prop) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
+                var options = {};
+                if(Array.isArray(value)) {
+                    options.startKey = JSON.stringify(value[0]);
+                    options.endKey = JSON.stringify(value[1]);
+                } else {
+                    options.key = JSON.stringify(value);
+                }
                 var url = ['_design/', name, '/_view/', prop].join('');
-                db.query('GET', url, {key:JSON.stringify(value)}, function(err, res) {
+                db.query('GET', url, options, function(err, res) {
                     err && console.log(err);
                     callback(err ? [] : instantiateResults(res));
                 })
@@ -193,7 +200,7 @@ exports.create = function(name, config, constructor) {
         var that = {};
 
         that.serialize = function() {
-            var obj = Object.getOwnPropertyNames(config.properties).concat(['lastUpdated','dateCreated']).reduce(function(obj, prop) {
+            var obj = Object.getOwnPropertyNames(config.properties).reduce(function(obj, prop) {
                 obj[prop] = that[prop];
                 return obj;
             }, {});

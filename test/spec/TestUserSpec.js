@@ -44,6 +44,19 @@ describe('TestUser', function() {
             asyncSpecWait();
         });
 
+        it('should allow us to create more than one', function() {
+            var u = domain.TestUser.create({username:'tester2', firstName:'Test2', lastName:'Tester2'});
+            u.save(function(err, res) {
+                expect(res.ok).toBeTruthy();
+                domain.TestUser.list(function(users) {
+                    expect(users.length).toEqual(2);
+                    asyncSpecDone();
+                })
+                asyncSpecWait();
+            });
+        })
+
+
         it('should allow us to update the object after initial save', function() {
             user.username = 'tester';
             user.save(function(err, res) {
@@ -51,7 +64,7 @@ describe('TestUser', function() {
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
                 expect(rev).not.toEqual(user.rev);
-                expect(user.dateCreated).toEqual(dateCreated);
+                expect(user.dateCreated.getTime()).toEqual(dateCreated.getTime());
                 expect(user.lastUpdated).not.toEqual(lastUpdated);
                 asyncSpecDone();
             });
@@ -113,6 +126,16 @@ describe('TestUser', function() {
     }); 
 
 
+    describe('findAllByDateCreated()', function() {
+        it('should return docs', function() {
+            domain.TestUser.findAllByDateCreated(['a','Z'],function(users) {
+                expect(users.length).toEqual(2);
+                asyncSpecDone();
+            })
+            asyncSpecWait();
+        })
+    })
+
 
     describe('custom views', function() {
         it('should add the finder', function() {
@@ -143,9 +166,10 @@ describe('TestUser', function() {
 
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
-            domain.TestUser.findAllByUsername('tester', function(users) {
-                (function removeAll(user) {
-                    user.remove(function(err, res) {
+            domain.TestUser.findAllByUsername(['tester','testerZ'], function(users) {
+console.log(users);
+                (function removeAll(u) {
+                    u.remove(function(err, res) {
                         expect(res.ok).toBeTruthy();
                         users.length ? removeAll(users.shift()) : asyncSpecDone();
                     });
