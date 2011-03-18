@@ -35,33 +35,29 @@ exports.init = function(config, callback) {
 
 /**
  * Create a domain constructor.  Use this in each domain file
- * @param name
- * @param config
- * @param constructor
  */
-exports.create = function(name, config, constructor) {
+exports.create = function(name, config, constr) {
     console.log('Adding to domain: ' + name);
 
     config.properties.dateCreated = {};
     config.properties.lastUpdated = {};
 
     var factory = function() {
-        var c = constructor ? constructor(Base()) : Base();
+        var c = constr ? constr(Base()) : Base();
         c.properties = config.properties;
         return c;
     }
 
     // Run all of the creators
-    addViews(function() {
-        addFinders(function() {
-            addCreateMethod(function() {
+    addCreateMethod(function() {
+        addViews(function() {
+            addFinders(function() {
             });
         });
     });
 
-    exports[name] = factory;
 
-    return factory;
+    return exports[name] = factory;
 
     function addFinders(callback) {
         for (prop in config.properties) {
@@ -88,7 +84,7 @@ exports.create = function(name, config, constructor) {
         function addFindAllBy(prop) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
                 var options = {};
-                if(Array.isArray(value)) {
+                if (Array.isArray(value)) {
                     options.startKey = JSON.stringify(value[0]);
                     options.endKey = JSON.stringify(value[1]);
                 } else {
