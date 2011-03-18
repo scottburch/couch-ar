@@ -29,7 +29,7 @@ exports.init = function(config, callback) {
         fs.readdirSync(config.root).forEach(function(filename) {
             if (/\.js$/.test(filename)) {
                 var name = filename.substr(0, filename.lastIndexOf('.'));
-                require(config.root + '/' + filename)[name];
+                require(config.root + '/' + filename);
             }
         })
         callback(db);
