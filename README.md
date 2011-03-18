@@ -144,7 +144,7 @@ You can also add custom views to any domain constructor
 
 The following example will create a view to find a user by first or last name:
 
-    exports.TestUser = domain.create('TestUser',{
+    domain.create('TestUser',{
         properties:{
             username: {},
             password: {},
