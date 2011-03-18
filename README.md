@@ -38,6 +38,8 @@ For information on how to run the tests using this module, please refer
 to the jasmin-node documentation.  I have included only enough to run the
 tests.
 
+---------------
+
 The first step is to run the init method to generate the database and read
 your domain files.
 
