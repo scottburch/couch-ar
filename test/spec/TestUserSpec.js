@@ -1,5 +1,3 @@
-
-var TestUser
 var domain;
 
 describe('init() method', function() {
