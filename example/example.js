@@ -4,10 +4,10 @@ var domain = require('couch-ar');
         dbName: 'couch-ar-example',            // The database name - couch-ar will create the database
         root: __dirname + '/domain'           // The root of the domain constructors
     }, function(db){
-     setTimeout(continueOn, 1000) // Some time for the database to initialize before starting
+     setTimeout(createUser, 1000) // Some time for the database to initialize before starting
  });
 
-function continueOn() {
+function createUser() {
 
     var user = domain.User.create({
         username: 'scott',
@@ -17,13 +17,13 @@ function continueOn() {
     });
 
     user.save(function(err,res){
-        console.log('user ' + user.username + 'added')
+        console.log('user ' + user.username + ' added')
         readUser();
     });
 }
 
 function readUser() {
-    domain.User.findByUsername('scott', function(user) {
+    domain.User.findByFirstOrLastName('Scott', function(user) {
         console.log('users fullname is ' + user.fullName)              // Scott Burch
         removeAllUsers()
     });

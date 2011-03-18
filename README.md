@@ -23,7 +23,13 @@ NOTE: We also use 'fs'
 
 ## How to use
 
-The best way to see how it works is to run the included tests.
+There is a quick example in the example directory. This is also a good way to see if you have everything setup correctly.
+
+    cd example
+    node example
+
+
+The most complete way to see how it works is to examine and run the included tests.
     cd to test
     ./specs.sh
 
