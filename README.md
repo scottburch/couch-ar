@@ -16,6 +16,7 @@
 ## Installation
 
 npm install cradle (this is a dependency)
+
 npm install couch-ar
 
 NOTE: We also use 'fs'
