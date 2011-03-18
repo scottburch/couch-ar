@@ -14,16 +14,11 @@
  Please feel free to write with any comments or suggestions: scott@bulldoginfo.com
 
 ## Installation
-You can install in one of two ways: 
 
-1) Download the index.js file and place it in .node_libraries/couch-ar.
+npm install cradle (this is a dependency)
+npm install couch-ar
 
--- or --
-
-2) npm install couch-ar
-
-NOTE: You also need to install cradle
-
+NOTE: We also use 'fs'
 
 ## How to use
 
