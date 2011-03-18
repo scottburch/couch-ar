@@ -29,7 +29,7 @@ exports.init = function(config, callback) {
         fs.readdirSync(config.root).forEach(function(filename) {
             if (/\.js$/.test(filename)) {
                 var name = filename.substr(0, filename.lastIndexOf('.'));
-                exports[name] = require(config.root + '/' + filename)[name];
+                require(config.root + '/' + filename)[name];
             }
         })
         callback(db);
@@ -62,6 +62,7 @@ exports.create = function(name, config, constructor) {
         });
     });
 
+    exports[name] = factory;
 
     return factory;
 

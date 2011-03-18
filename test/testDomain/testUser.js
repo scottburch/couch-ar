@@ -1,6 +1,6 @@
 var domain = require('couch-ar');
 
-exports.TestUser = domain.create('TestUser',{
+domain.create('TestUser',{
     properties:{
         username: {},
         password: {},

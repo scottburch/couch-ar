@@ -47,7 +47,7 @@ your domain files.
 Next, create your domain files in ../testDomain like this:
 
     var domain = require('couch-ar');
-    exports.TestUser = domain.create('TestUser',{
+    domain.create('TestUser',{
         properties:{
             username: {},
             password: {},
@@ -68,7 +68,6 @@ Next, create your domain files in ../testDomain like this:
         return that;
     });
 
-NOTE: *** The name of the file must match the name passed to create ***
 
 I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
@@ -191,3 +190,7 @@ Mar 17, 2011 - release v0.1.4
 
    added ability to do a findAllBy() with a start and end key
    moved dateCreated and lastUpdated to be created earlier so that finders work with them
+
+Mar 18, 2011 - release v0.1.5
+
+   removed requirement for filename to match the passed name of the constructor or to return the name of the constructor in the js file it is defined in
