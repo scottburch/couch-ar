@@ -21,13 +21,15 @@ npm install couch-ar
 
 NOTE: We also use 'fs'
 
-## How to use
+## Quickstart
 
 There is a quick example in the example directory. This is also a good way to see if you have everything setup correctly.
 
     cd example
     node example
 
+The example does not contain all of the functions.  Just basic save/read/remove.
+It is recommended that you read the 'How to use' section to get more detail.
 
 The most complete way to see how it works is to examine and run the included tests.
     cd to test
@@ -38,7 +40,7 @@ For information on how to run the tests using this module, please refer
 to the jasmin-node documentation.  I have included only enough to run the
 tests.
 
----------------
+## How to use
 
 The first step is to run the init method to generate the database and read
 your domain files.
