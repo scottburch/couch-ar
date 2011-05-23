@@ -200,3 +200,8 @@ Mar 17, 2011 - release v0.1.4
 Mar 18, 2011 - release v0.1.5
 
    removed requirement for filename to match the passed name of the constructor or to return the name of the constructor in the js file it is defined in
+
+May 23, 2011 - release v0.1.6
+
+   Changed layout to match new npm and node module layout - This was causing tests not to work and the example files not to work
+   Changed package.json file to add cradle as a dependency
