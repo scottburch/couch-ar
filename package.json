@@ -3,16 +3,17 @@
   "description": "active record for CouchDB",
   "version": "0.1.6",
   "homepage": "https://github.com/scottburch/couch-ar",
+  "dependencies": {"cradle": ">=0.5.5"},
   "author": {
     "name": "Scott Burch",
     "email": "scott@bulldoginfo.com"
   },
   "directories": {
-    "lib": ""
+    "test": "./test"
   },
   "main": "./couch-ar",
   "engines": {
-    "node": "*"
+    "node": ">=0.4.7"
   },
   "_id": "couch-ar@0.1.6",
   "_nodeSupported": true,
