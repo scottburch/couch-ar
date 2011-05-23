@@ -1,4 +1,4 @@
-var domain = require('couch-ar');
+var domain = require('../../index');
 
 exports.TestUser = domain.create('Another',{
     properties:{

@@ -1,6 +1,6 @@
-var domain = require('couch-ar');
+var ar = require('../index');
 
- domain.init({
+ ar.init({
         dbName: 'couch-ar-example',            // The database name - couch-ar will create the database
         root: __dirname + '/domain'           // The root of the domain constructors
     }, function(db){
@@ -9,7 +9,7 @@ var domain = require('couch-ar');
 
 function createUser() {
 
-    var user = domain.User.create({
+    var user = ar.User.create({
         username: 'scott',
         password: 'private',
         firstName:'Scott',
@@ -23,14 +23,14 @@ function createUser() {
 }
 
 function readUser() {
-    domain.User.findByFirstOrLastName('Scott', function(user) {
+    ar.User.findByFirstOrLastName('Scott', function(user) {
         console.log('users fullname is ' + user.fullName)              // Scott Burch
         removeAllUsers()
     });
 }
 
 function removeAllUsers() {
-    domain.User.list(function(users){
+    ar.User.list(function(users){
         users.forEach(function(user) {
             user.remove(function(err,res){
                 console.log('user ' + user.username + ' removed')
