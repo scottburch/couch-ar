@@ -1,4 +1,4 @@
-var ar = require('../index');
+var ar = require('../../couch-ar');
 
  ar.init({
         dbName: 'couch-ar-example',            // The database name - couch-ar will create the database

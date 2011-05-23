@@ -10,7 +10,7 @@
   "directories": {
     "lib": ""
   },
-  "main": "./",
+  "main": "./couch-ar",
   "engines": {
     "node": "*"
   },

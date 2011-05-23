@@ -2,7 +2,7 @@ var domain;
 
 describe('init() method', function() {
     it('creates db', function() {
-        domain = require('../../index');
+        domain = require('../../couch-ar');
         domain.init({
             dbName: 'couch-ar-test',
             root: __dirname + '/../testDomain'
@@ -14,7 +14,7 @@ describe('init() method', function() {
     });
 
     it('adds the domain constructors to couch-ar', function() {
-        expect(require('../../index').TestUser).toBeDefined();
+        expect(require('../../couch-ar').TestUser).toBeDefined();
     });
 });
 

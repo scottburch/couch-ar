@@ -1,4 +1,4 @@
-var domain = require('../../index');
+var domain = require('../../../couch-ar');
 domain.create('User',{
     properties:{
         username: {},
