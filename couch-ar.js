@@ -11,7 +11,13 @@ var db;
 exports.init = function(config, callback) {
     callback = callback || function() {
     };
-    db = new cradle.Connection().database(config.dbName);
+    config.connectionOptions = config.connectionOptions || {};
+
+    if (config.host && config.port) {
+      db = new(cradle.Connection)(config.host, config.port, config.connectionOptions).database(config.dbName);
+    } else {
+      db = new cradle.Connection().database(config.dbName);
+    }
 
     db.exists(function(err, result) {
         if (result === false) {
