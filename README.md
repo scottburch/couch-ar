@@ -48,6 +48,9 @@ your domain files.
         require('couch-ar').init({
             dbName: 'couch-ar-test',                    // The database name - couch-ar will create the database
             root: __dirname + '../testDomain'           // The root of the domain constructors
+            host: 'myHost'                              // (optional) The hostname
+            port: 9999                                  // (optional) The port
+            connectionOptions: {}                       // (optional) Cradle config options
         }, function(db){ // passes back the cradle connection });
 
 Next, create your domain files in ../testDomain like this:

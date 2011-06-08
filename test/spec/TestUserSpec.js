@@ -1,12 +1,35 @@
 var domain;
 
-describe('init() method', function() {
+beforeEach(function() {
+    domain = require('couch-ar');
+
+});
+
+describe('init() method with host and port options', function() {
     it('creates db', function() {
         domain = require('couch-ar');
         domain.init({
-            dbName: 'couch-ar-test',
-            root: __dirname + '/../testDomain'
-        }, function() {
+                    dbName: 'couch-ar-host-port-test',
+                    root: __dirname + '/../testDomain',
+                    host: 'localhost',
+                    port: 5984
+                },
+                function() {
+                    // delay so that everything can be setup
+                    setTimeout(asyncSpecDone, 500);
+                }
+        );
+        asyncSpecWait();
+    });
+});
+
+
+/*describe('init() method without host and port options', function() {
+    it('creates db', function() {
+        domain.init({
+                    dbName: 'couch-ar-test',
+                    root: __dirname + '/../testDomain'
+                }, function() {
             // delay so that everything can be setup
             setTimeout(asyncSpecDone, 500);
         });
@@ -16,7 +39,7 @@ describe('init() method', function() {
     it('adds the domain constructors to couch-ar', function() {
         expect(require('couch-ar').TestUser).toBeDefined();
     });
-});
+});*/
 
 
 describe('TestUser', function() {
@@ -98,8 +121,8 @@ describe('TestUser', function() {
 
     describe('findById() method', function() {
         it('should find a user using findById', function() {
-            domain.TestUser.findByUsername('tester', function(user){
-                domain.TestUser.findById(user.id, function(user){
+            domain.TestUser.findByUsername('tester', function(user) {
+                domain.TestUser.findById(user.id, function(user) {
                     expect(user.username).toEqual('tester');
                     expect(user.id).toBeDefined();
                     expect(user.rev).toBeDefined();
@@ -115,18 +138,18 @@ describe('TestUser', function() {
 
     describe('list() method', function() {
         it('should show records in db', function() {
-            domain.TestUser.list(function(users){
+            domain.TestUser.list(function(users) {
                 expect(users.length).toBeGreaterThan(0);
                 asyncSpecDone();
             });
         });
         asyncSpecWait();
-    }); 
+    });
 
 
     describe('findAllByDateCreated()', function() {
         it('should return docs', function() {
-            domain.TestUser.findAllByDateCreated(['a','Z'],function(users) {
+            domain.TestUser.findAllByDateCreated(['a','Z'], function(users) {
                 expect(users.length).toEqual(2);
                 asyncSpecDone();
             })
@@ -144,13 +167,13 @@ describe('TestUser', function() {
         it('findAll using custom view should return results', function() {
             domain.TestUser.findAllByFirstOrLastName('Tester', function(users) {
                 expect(users.length).toBeGreaterThan(0);
-                asyncSpecDone();                
+                asyncSpecDone();
             })
             asyncSpecWait();
         });
 
         it('find using custom view should return results', function() {
-            domain.TestUser.findByFirstOrLastName('Test', function(user){
+            domain.TestUser.findByFirstOrLastName('Test', function(user) {
                 expect(user).toBeDefined();
                 expect(user.lastName).toEqual('Tester');
                 asyncSpecDone();
@@ -159,7 +182,6 @@ describe('TestUser', function() {
 
         });
     })
-    
 
 
     describe('remove() method', function() {
@@ -174,7 +196,7 @@ describe('TestUser', function() {
             });
         });
         asyncSpecWait();
-    }); 
+    });
 
 
 });
