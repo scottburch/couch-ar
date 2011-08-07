@@ -1,7 +1,7 @@
 {
   "name": "couch-ar",
   "description": "active record for CouchDB",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "homepage": "https://github.com/scottburch/couch-ar",
   "dependencies": {"cradle": ">=0.5.5"},
   "author": {
@@ -18,7 +18,7 @@
   "_id": "couch-ar@0.1.6",
   "_nodeSupported": true,
   "_npmVersion": "1.0.6",
-  "_nodeVersion": "v0.4.7",
+  "_nodeVersion": "v0.4.8",
   "dist": {
     "shasum": "995d3b23f7b721bff91f822ffe6fdc5a8c8f61f0"
   }
