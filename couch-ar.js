@@ -66,38 +66,35 @@ exports.create = function(name, config, constr) {
     factory.addView = function() {
         addView.apply(factory, arguments);
     }
+    factory.viewNames = [];
 
     return exports[name] = factory;
 
     function addFinders(callback) {
         for (prop in config.properties) {
-            addFindAllBy(prop);
-            addFindBy(prop);
+            addFinders(prop);
         }
         for (view in config.views) {
-            addFindAllBy(view);
-            addFindBy(view);
+            addFinders(view);
         }
-        addFindAllBy('id');
-        addFindBy('id');
+        addFinders('id');
         addList();
         callback();
 
 
-        function addFindAllBy(prop) {
-            factory['findAllBy' + toUpper(prop)] = function(value, callback) {
-                executeView(prop, value, callback);
+        function addFinders(finderName) {
+            var upperName = toUpper(finderName);
+
+            factory['findAllBy' + upperName] = function(value, callback) {
+                executeView(finderName, value, callback);
             }
-        }
 
-
-        function addFindBy(prop) {
-            var upperName = toUpper(prop);
             factory['findBy' + upperName] = function(value, callback) {
                 factory['findAllBy' + upperName](value, function(results) {
                     callback(results[0]);
                 });
             }
+            factory.viewNames.push(finderName);
         }
 
         function addList() {
@@ -158,6 +155,7 @@ exports.create = function(name, config, constr) {
                 callback();
             });
         }
+        factory.viewNames.push(viewName);
 
     }
 

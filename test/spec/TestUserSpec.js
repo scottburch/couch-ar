@@ -230,6 +230,16 @@ describe('TestUser', function() {
     });
 
 
+    describe('.viewNames', function() {
+        it('should have viewNames', function() {
+            var viewNames = domain.TestUser.viewNames;
+            expect(viewNames).toContain('username');
+            expect(viewNames).toContain('id');
+            expect(viewNames).toContain('firstOrLastName');
+            expect(viewNames).toContain('lastAndFirstName');
+        });
+    });
+
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername(['tester','testerZ'], function(users) {

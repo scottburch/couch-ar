@@ -166,6 +166,9 @@ dateCreated = the date the object was first saved to the DB
 
 lastUpdated = the date the object was last updated
 
+## constructor properties
+
+viewNames = the list of view names
 
 ## custom views
 
@@ -198,33 +201,3 @@ This code will also add static finders:
 
 Provided under the MIT license.  In other words, do what you want with it.
 
-
-## Versions
-
-Feb 2, 2011 - released V0.1.1
-
-   new method list()
-   properties dateCreated and lastUpdated
-   create now allows undefined properties to be added to an object
-
-Feb 22, 2011 - released v0.1.2
-
-   added custom views to domain constructors
-
-Feb 22, 2011 - release v0.1.3
-
-   fix bug introduced in v0.1.2 - domain constructors without custom views throw errors
-
-Mar 17, 2011 - release v0.1.4
-
-   added ability to do a findAllBy() with a start and end key
-   moved dateCreated and lastUpdated to be created earlier so that finders work with them
-
-Mar 18, 2011 - release v0.1.5
-
-   removed requirement for filename to match the passed name of the constructor or to return the name of the constructor in the js file it is defined in
-
-May 23, 2011 - release v0.1.6
-
-   Changed layout to match new npm and node module layout - This was causing tests not to work and the example files not to work
-   Changed package.json file to add cradle as a dependency
