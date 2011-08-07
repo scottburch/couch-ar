@@ -136,6 +136,26 @@ findAllByXxx() can find documents in a range by passing an array as the value wi
     domain.TestUser.findAllByUsername(['a','aZ'], function(users) { // passed the user objects where username starts with 'a'})
 
 
+## addView()
+
+You can also add views after a domain constructor is initialized by using the addView() method
+
+    var view = {
+           map: function(doc) {
+                    emit(doc.firstName + ':' + doc.lastName, doc);
+                }
+            }
+
+    function callbqack(){}
+
+    domain.TestUser.addView('lastAndFirstName', view, callback);
+
+After that the view is available as finders just like any other view
+
+    domain.TestUser.findAllByFirstAndLastName('Scott:Burch', function(users) {})
+    domain.TestUser.findByFirstAndLastName('Scott:Burch', function(user) {})
+
+
 ## properties
 
 id = the DB id

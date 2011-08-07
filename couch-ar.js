@@ -63,6 +63,10 @@ exports.create = function(name, config, constr) {
     });
 
 
+    factory.addView = function() {
+        addView.apply(factory, arguments);
+    }
+
     return exports[name] = factory;
 
     function addFinders(callback) {
@@ -79,30 +83,13 @@ exports.create = function(name, config, constr) {
         addList();
         callback();
 
-        function instantiateResults(res) {
-            return res.map(function(row) {
-                row.id = row._id;
-                row.rev = row._rev;
-                return factory.create(row);
-            })
-        }
 
         function addFindAllBy(prop) {
             factory['findAllBy' + toUpper(prop)] = function(value, callback) {
-                var options = {};
-                if (Array.isArray(value)) {
-                    options.startKey = JSON.stringify(value[0]);
-                    options.endKey = JSON.stringify(value[1]);
-                } else {
-                    options.key = JSON.stringify(value);
-                }
-                var url = ['_design/', name, '/_view/', prop].join('');
-                db.query('GET', url, options, function(err, res) {
-                    err && console.log(err);
-                    callback(err ? [] : instantiateResults(res));
-                })
+                executeView(prop, value, callback);
             }
         }
+
 
         function addFindBy(prop) {
             var upperName = toUpper(prop);
@@ -121,11 +108,67 @@ exports.create = function(name, config, constr) {
                 })
             }
         }
+    }
 
-
-        function toUpper(s) {
-            return s[0].toUpperCase() + s.slice(1);
+    function executeView(viewName, value, callback) {
+        var options = {};
+        if (Array.isArray(value)) {
+            options.startKey = JSON.stringify(value[0]);
+            options.endKey = JSON.stringify(value[1]);
+        } else {
+            options.key = JSON.stringify(value);
         }
+
+        var url = ['_design/', name, '/_view/', viewName].join('');
+        db.query('GET', url, options, function(err, res) {
+            err && console.log(err);
+            callback(err ? [] : instantiateResults(res));
+        });
+    }
+
+    function instantiateResults(res) {
+        return res.map(function(row) {
+            row.id = row._id;
+            row.rev = row._rev;
+            return factory.create(row);
+        })
+    }
+
+
+    function toUpper(s) {
+        return s[0].toUpperCase() + s.slice(1);
+    }
+
+
+    function addView(viewName, viewDef, callback) {
+        db.get('_design/' + name, function(err, res) {
+            res.views[viewName] = wrapView(name, viewDef);
+            saveView(res.views, callback);
+        });
+        function saveView(views, callback) {
+            db.save('_design/' + name, views, function(err, res) {
+                factory['findAllBy' + toUpper(viewName)] = function(value, callback) {
+                    executeView(viewName, value, callback);
+                }
+                factory['findBy' + toUpper(viewName)] = function(value, callback) {
+                    executeView(viewName, value, function(objects) {
+                        callback(objects[0]);
+                    });
+                }
+                callback();
+            });
+        }
+
+    }
+
+    function wrapView(type, view) {
+        if (view.map) {
+            view.map = view.map.toString();
+            var code = "$1if (doc.type==='" + type + "'){$2}}"
+            view.map = view.map.replace(/[\n]/g, '');
+            view.map = view.map.replace(/(function.*?\(.*?\).*?{)(.*)}.*$/, code);
+        }
+        return view;
     }
 
     function addViews(callback) {
@@ -134,12 +177,7 @@ exports.create = function(name, config, constr) {
         if (config.views) {
             Object.keys(config.views).forEach(function(viewName) {
                 var view = config.views[viewName];
-                if (view.map) {
-                    view.map = view.map.toString();
-                    var code = "$1if (doc.type==='" + name + "'){$2}}"
-                    view.map = view.map.replace(/[\n]/g, '');
-                    view.map = view.map.replace(/(function.*?\(.*?\).*?{)(.*)}.*$/, code);
-                }
+                wrapView(name, view);
                 views[viewName] = view;
             });
         }

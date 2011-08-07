@@ -81,7 +81,7 @@ describe('TestUser', function() {
         it('should allow us to update the object after initial save', function() {
             user.username = 'tester';
             user.save(function(err, res) {
-                expect(res.ok).toBeTruthy();
+                expect(res.ok).toBe(true);
                 expect(user.id).toBeDefined();
                 expect(user.rev).toBeDefined();
                 expect(rev).not.toEqual(user.rev);
@@ -184,6 +184,52 @@ describe('TestUser', function() {
     })
 
 
+    describe('addView() method', function() {
+        it('should add a view to the db and call the callback when done', function() {
+            domain.TestUser.addView('lastAndFirstName', {
+                map: function(doc) {
+                    emit(doc.firstName + ':' + doc.lastName, doc);
+                }
+            }, function() {
+                asyncSpecDone();
+            });
+            asyncSpecWait();
+            runs(function() {
+                expect(domain.TestUser.findAllByLastAndFirstName).toBeDefined();
+                expect(domain.TestUser.findByLastAndFirstName).toBeDefined();
+            });
+        });
+        it('should provide a working findAllByLastAndFirstName()', function() {
+            var callback = jasmine.createSpy();
+            runs(function() {
+                domain.TestUser.findAllByLastAndFirstName('Test:Tester', callback);
+            });
+            waitsFor(function() {
+                return callback.callCount;
+            });
+            runs(function() {
+                var users = callback.mostRecentCall.args[0]
+                expect(users.length).toBe(1);
+                expect(users[0].firstName).toBe('Test');
+            });
+        });
+
+        it('should provide a working findByLastAndFirstName()', function() {
+            var callback = jasmine.createSpy();
+            runs(function() {
+                domain.TestUser.findByLastAndFirstName('Test:Tester', callback);
+            });
+            waitsFor(function() {
+                return callback.callCount;
+            });
+            runs(function() {
+                var user = callback.mostRecentCall.args[0];
+                expect(user.firstName).toBe('Test');
+            });
+        });
+    });
+
+
     describe('remove() method', function() {
         it('should remove a record from couchDb', function() {
             domain.TestUser.findAllByUsername(['tester','testerZ'], function(users) {
@@ -197,6 +243,7 @@ describe('TestUser', function() {
         });
         asyncSpecWait();
     });
+
 
 
 });
