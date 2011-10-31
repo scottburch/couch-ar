@@ -109,6 +109,12 @@ function runTests(testConfig) {
                 });
                 asyncSpecWait();
             });
+
+            it('should return undefined when using findByUsername with a unknown user', function() {
+                domain.TestUser.findByUsername('wrong', function(user) {
+                    expect(user).not.toBeDefined();
+                });
+            });
         });
 
         describe('findById() method', function() {
