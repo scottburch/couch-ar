@@ -2,7 +2,7 @@ var cradle = require('cradle');
 var fs = require('fs');
 
 var databases = {}
-
+var defaultDbName;
 
 /**
  * initialize the DB and create constructor factories
@@ -12,7 +12,7 @@ var databases = {}
 
 exports.init = function(config, callback) {
     var db;
-    config.dbName = config.dbName || 'default';
+    defaultDbName = config.dbName
     callback = callback || function() {
     };
     config.connectionOptions = config.connectionOptions || {};
@@ -49,7 +49,7 @@ exports.init = function(config, callback) {
  * Create a domain constructor.  Use this in each domain file
  */
 exports.create = function(name, config, constr) {
-    config.dbName = config.dbName || 'default';
+    config.dbName = config.dbName || defaultDbName;
     var db = databases[config.dbName];
     console.log('Adding to domain: ' + name);
 

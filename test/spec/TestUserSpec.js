@@ -2,8 +2,8 @@ var domain = require('couch-ar');
 
 
 // Testing initialization with and without the host and dbname
-runTests({dbName: 'couch-ar-test', host: 'localhost', port: 5984});
-runTests({});
+runTests({createDbName: 'couch-ar-test', domainDbName: 'couch-ar-test', host: 'localhost', port: 5984});
+runTests({createDbName: 'couch-ar-test2'});
 
 
 function runTests(testConfig) {
@@ -11,7 +11,7 @@ function runTests(testConfig) {
         it('creates db', function() {
             domain = require('couch-ar');
             domain.init({
-                    dbName: testConfig.dbName,
+                    dbName: testConfig.createDbName,
                     root: __dirname + '/../testDomain',
                     host: testConfig.host,
                     port: testConfig.port
@@ -32,7 +32,7 @@ function runTests(testConfig) {
             var user;
             var rev;
             it('should set id and rev before callback', function() {
-                user = domain.TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester',erroneous:'xxxxxxxx', dbName:testConfig.dbName});
+                user = domain.TestUser.create({username:'tester1', firstName:'Test', lastName:'Tester',erroneous:'xxxxxxxx', dbName:testConfig.domainDbName});
                 user.save(function(err, res) {
                     rev = user.rev;
                     expect(res.ok).toBeTruthy();
@@ -49,7 +49,7 @@ function runTests(testConfig) {
             });
 
             it('should allow us to create more than one', function() {
-                var u = domain.TestUser.create({username:'tester2', firstName:'Test2', lastName:'Tester2', dbName:testConfig.dbName});
+                var u = domain.TestUser.create({username:'tester2', firstName:'Test2', lastName:'Tester2', dbName:testConfig.domainDbName});
                 u.save(function(err, res) {
                     expect(res.ok).toBeTruthy();
                     domain.TestUser.list(function(users) {
