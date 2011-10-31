@@ -15,6 +15,12 @@ describe('duplicate namespaces for domains', function() {
     });
 });
 
+describe('errors in domain constructor definition', function() {
+    it('should throw exception if missing return in constructor', function() {
+        expect(domain.Broken.create({})).toBeDefined();
+    });
+});
+
 function runTests(testConfig) {
     describe('init() method with host and port options', function() {
         it('creates db', function() {
