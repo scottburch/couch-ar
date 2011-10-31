@@ -19,7 +19,6 @@ domain.create('TestUser',{
     that.beforeSave = function() {
         that.fullName = that.firstName + ' ' + that.lastName;
     }
-    return that;
 });
 
 

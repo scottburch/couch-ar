@@ -57,16 +57,8 @@ exports.create = function(name, config, constr) {
     config.properties.lastUpdated = {};
 
     var factory = function() {
-        var c;
-        if(constr) {
-            c = constr(Base());
-            if(!c) {
-                console.log('forgot to return "that" at end of constructor for '+name + ' Skipping!!');
-                return Base();
-            }
-        } else {
-            c = Base();
-        }
+        var c = Base();
+        constr && constr(c);
         c.properties = config.properties;
         return c;
     }
