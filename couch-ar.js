@@ -200,23 +200,9 @@ exports.create = function(name, config, constr) {
         }
 
 
-        db.get('_design/' + name, function(err, res) {
-            if (res) {
-                db.remove('_design/' + name, function(err, res) {
-                    if (res.ok) {
-                        saveView();
-                    }
-                });
-            } else {
-                saveView();
-            }
+        db.save('_design/' + name, views, function(err, res) {
+            callback && callback();
         });
-
-        function saveView() {
-            db.save('_design/' + name, views, function(err, res) {
-                callback && callback();
-            });
-        }
 
     }
 
