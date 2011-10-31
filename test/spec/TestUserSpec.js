@@ -1,9 +1,4 @@
-var domain;
-
-beforeEach(function() {
-    domain = require('couch-ar');
-
-});
+var domain = require('couch-ar');
 
 describe('init() method with host and port options', function() {
     it('creates db', function() {
@@ -16,7 +11,7 @@ describe('init() method with host and port options', function() {
                 },
                 function() {
                     // delay so that everything can be setup
-                    setTimeout(asyncSpecDone, 500);
+                    setTimeout(asyncSpecDone, 1000);
                 }
         );
         asyncSpecWait();
@@ -69,13 +64,14 @@ describe('TestUser', function() {
             var u = domain.TestUser.create({username:'tester2', firstName:'Test2', lastName:'Tester2'});
             u.save(function(err, res) {
                 expect(res.ok).toBeTruthy();
-                domain.TestUser.list(function(users) {
-                    expect(users.length).toEqual(2);
-                    asyncSpecDone();
-                })
-                asyncSpecWait();
+                    domain.TestUser.list(function(users) {
+                        expect(users.length).toEqual(2);
+                        asyncSpecDone();
+                    });
             });
-        })
+            asyncSpecWait();
+        });
+
 
 
         it('should allow us to update the object after initial save', function() {
