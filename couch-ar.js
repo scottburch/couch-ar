@@ -1,14 +1,18 @@
 var cradle = require('cradle');
 var fs = require('fs');
 
-var db;
+var databases = {}
+
 
 /**
  * initialize the DB and create constructor factories
  * @param config
  * @param callback
  */
+
 exports.init = function(config, callback) {
+    var db;
+    config.dbName = config.dbName || 'default';
     callback = callback || function() {
     };
     config.connectionOptions = config.connectionOptions || {};
@@ -18,6 +22,8 @@ exports.init = function(config, callback) {
     } else {
       db = new cradle.Connection().database(config.dbName);
     }
+
+    databases[config.dbName] = db;
 
     db.exists(function(err, result) {
         if (result === false) {
@@ -43,6 +49,8 @@ exports.init = function(config, callback) {
  * Create a domain constructor.  Use this in each domain file
  */
 exports.create = function(name, config, constr) {
+    config.dbName = config.dbName || 'default';
+    var db = databases[config.dbName];
     console.log('Adding to domain: ' + name);
 
     config.properties.dateCreated = {};

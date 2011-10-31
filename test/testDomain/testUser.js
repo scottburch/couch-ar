@@ -1,6 +1,7 @@
 var domain = require('couch-ar');
 
 domain.create('TestUser',{
+    dbName: 'couch-ar-test',
     properties:{
         username: {},
         password: {},
