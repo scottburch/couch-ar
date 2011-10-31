@@ -85,7 +85,7 @@ To understand my code it is best to understand this style.
 After running init() the domain constructors are available from the couch-ar object.
 
     var domain = require('couch-ar');
-    domain.TestUser.create({})
+    domain.TestUser.create({}) or domain['my-db-name'].TestUser.create({})
 
 
 ## Before Hooks

@@ -5,6 +5,15 @@ var domain = require('couch-ar');
 runTests({createDbName: 'couch-ar-test', domainDbName: 'couch-ar-test', host: 'localhost', port: 5984, baseDir: 'testDomain'});
 runTests({createDbName: 'couch-ar-test2', baseDir: 'testDomain2'});
 
+describe('duplicate namespaces for domains', function() {
+    it('should have setup the duplicate namespace for the domains', function() {
+        expect(domain['couch-ar-test'].TestUser).toBeDefined();
+    });
+
+    it('should make the domain constructor and the base constructor the same object', function() {
+        expect(domain['couch-ar-test2'].TestUser).toBe(domain.TestUser);
+    });
+});
 
 function runTests(testConfig) {
     describe('init() method with host and port options', function() {

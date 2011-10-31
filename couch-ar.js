@@ -76,7 +76,8 @@ exports.create = function(name, config, constr) {
     }
     factory.viewNames = [];
 
-    return exports[name] = factory;
+    exports[config.dbName] = exports[config.dbName] || {};
+    return exports[name] = exports[config.dbName][name] = factory;
 
     function addFinders(callback) {
         for (prop in config.properties) {
