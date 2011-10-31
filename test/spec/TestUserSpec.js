@@ -2,8 +2,8 @@ var domain = require('couch-ar');
 
 
 // Testing initialization with and without the host and dbname
-runTests({createDbName: 'couch-ar-test', domainDbName: 'couch-ar-test', host: 'localhost', port: 5984});
-runTests({createDbName: 'couch-ar-test2'});
+runTests({createDbName: 'couch-ar-test', domainDbName: 'couch-ar-test', host: 'localhost', port: 5984, baseDir: 'testDomain'});
+runTests({createDbName: 'couch-ar-test2', baseDir: 'testDomain2'});
 
 
 function runTests(testConfig) {
@@ -12,7 +12,7 @@ function runTests(testConfig) {
             domain = require('couch-ar');
             domain.init({
                     dbName: testConfig.createDbName,
-                    root: __dirname + '/../testDomain',
+                    root: __dirname + '/../'+testConfig.baseDir,
                     host: testConfig.host,
                     port: testConfig.port
                 },
