@@ -57,6 +57,7 @@ Next, create your domain files in ../testDomain like this:
 
     var domain = require('couch-ar');
     domain.create('TestUser',{
+        dbName: 'couch-ar-test',                          // Optional - choose the db to use for this domain constructor
         properties:{
             username: {},
             password: {},
@@ -177,6 +178,7 @@ You can also add custom views to any domain constructor
 The following example will create a view to find a user by first or last name:
 
     domain.create('TestUser',{
+        dbName: 'my-db'
         properties:{
             username: {},
             password: {},
