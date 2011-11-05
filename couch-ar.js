@@ -58,7 +58,7 @@ exports.create = function(name, config, constr) {
 
     var factory = function() {
         var c = Base();
-        constr && constr(c);
+        constr && constr.call(c,c);
         c.properties = config.properties;
         return c;
     }

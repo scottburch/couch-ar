@@ -1,5 +1,9 @@
 # couch-ar is a thin active record implementation for couchDB
 
+## Important Note
+Previous versions of couch-ar included a bug that would cause the domain constructor finder methods not to work if you restarted the server.
+This appears to be due to a bug in newer versions of CouchDB.  I am not sure when it appeared, but I have modified the code to deal with it.
+
 ## Motivation
 
  The idea behind couch-ar is to provide an easy to use active record
@@ -72,12 +76,17 @@ Next, create your domain files in ../testDomain like this:
             }}
         }
     }, function(that) {
-        that.beforeSave = function() {
+        this.beforeSave = function() {
             that.fullName = that.firstName + ' ' + that.lastName;
         }
         return that;
     });
 
+
+## Constructor
+
+Domain definitions can contain a constructor function as an argument.  'this' in constructor functions points to the instantiated object itself so that you can
+use the constructor function to modify the instantiated object or the provided 'that' argument.
 
 I am using Douglas Crockford's parasitic inheritance and power constructors.
 To understand my code it is best to understand this style.
