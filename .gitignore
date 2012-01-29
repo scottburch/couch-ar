@@ -1,2 +1,3 @@
-couch-ar.iml
+*.iws
 /.idea
+node_modules
