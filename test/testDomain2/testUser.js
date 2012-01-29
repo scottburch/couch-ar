@@ -9,6 +9,10 @@ domain.create('TestUser',{
         lastName: {},
         fullName: {}
     },
+    hasMany: {
+        phoneNumbers: 'PhoneNumber'
+    },
+
     views: {
         firstOrLastName: {map: function(doc) {
             emit(doc.firstName, doc);

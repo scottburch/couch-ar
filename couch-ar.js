@@ -1,6 +1,7 @@
 var cradle = require('cradle');
 var fs = require('fs');
-
+var Base = require('./Base');
+var helpers = require('./helpers');
 var databases = {}
 var defaultDbName;
 
@@ -57,7 +58,7 @@ exports.create = function(name, config, constr) {
     config.properties.lastUpdated = {};
 
     var factory = function() {
-        var c = Base();
+        var c = Base(db, name, config);
         constr && constr.call(c,c);
         c.properties = config.properties;
         return c;
@@ -93,7 +94,7 @@ exports.create = function(name, config, constr) {
 
 
         function addFinders(finderName) {
-            var upperName = toUpper(finderName);
+            var upperName = helpers.toUpper(finderName);
 
             factory['findAllBy' + upperName] = function(value, callback) {
                 executeView(finderName, value, callback);
@@ -142,11 +143,6 @@ exports.create = function(name, config, constr) {
     }
 
 
-    function toUpper(s) {
-        return s[0].toUpperCase() + s.slice(1);
-    }
-
-
     function addView(viewName, viewDef, callback) {
         db.get('_design/' + name, function(err, res) {
             res.views[viewName] = wrapView(name, viewDef);
@@ -154,10 +150,10 @@ exports.create = function(name, config, constr) {
         });
         function saveView(views, callback) {
             db.save('_design/' + name, views, function(err, res) {
-                factory['findAllBy' + toUpper(viewName)] = function(value, callback) {
+                factory['findAllBy' + helpers.toUpper(viewName)] = function(value, callback) {
                     executeView(viewName, value, callback);
                 }
-                factory['findBy' + toUpper(viewName)] = function(value, callback) {
+                factory['findBy' + helpers.toUpper(viewName)] = function(value, callback) {
                     executeView(viewName, value, function(objects) {
                         callback(objects[0]);
                     });
@@ -224,52 +220,6 @@ exports.create = function(name, config, constr) {
         callback && callback();
     }
 
-    /**
-     * The base constructor that is extended by each domain constructor
-     * Contains the basic methods save/remove...
-     */
-    function Base() {
-        var that = {};
-
-        that.serialize = function() {
-            var obj = Object.getOwnPropertyNames(config.properties).reduce(function(obj, prop) {
-                obj[prop] = that[prop];
-                return obj;
-            }, {});
-            obj.type = name;
-            obj._id = obj.id;
-            obj._rev = obj.rev;
-            return obj;
-        }
-
-        that.save = function(callback) {
-            callback = callback || function() {
-            }
-            that.beforeSave && that.beforeSave();
-            var out = that.serialize();
-            that.dateCreated = that.dateCreated || new Date();
-            that.lastUpdated = new Date();
-            db.save(that.id, that.serialize(), function(err, res) {
-                if (res.ok) {
-                    that.id = res.id;
-                    that.rev = res.rev
-                }
-                callback(err, res);
-            });
-        }
-
-        that.remove = function(callback) {
-            if (that.id) {
-                db.remove(that.id, that.rev, function(err, res) {
-                    that.id = err ? that.id : undefined;
-                    callback(err, res);
-                });
-            } else {
-                callback(err, res);
-            }
-        }
-        return that;
-    }
 }
 
 

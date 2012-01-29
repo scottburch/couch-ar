@@ -69,6 +69,9 @@ Next, create your domain files in ../testDomain like this:
             lastName: {},
             fullName: {}
         },
+        hasMany: {
+            phoneNumbers: 'PhoneNumber'
+        },
         views: {
             firstOrLastName: {map: function(doc) {
                 emit(doc.firstName, doc);
@@ -194,6 +197,9 @@ The following example will create a view to find a user by first or last name:
             firstName:{},
             lastName: {},
         },
+        hasMany: {
+           phoneNumbers: 'PhoneNumber'
+        },
         views: {
             firstOrLastName: {map: function(doc) {
                 emit(doc.firstName, doc);
@@ -206,6 +212,25 @@ This code will also add static finders:
 
     domain.TestUser.findAllByFirstOrLastName('Test',function() {});
     domain.TestUser.findByFirstOrLastName('Tester',function() {});
+
+
+## Associations
+
+couch-ar now supports hasMany associations.  To define a hasMany association pass a __hasMany__ in the config as shown above.
+The value 'PhoneNumber' is a previously defined model.
+
+When you supply a property for hasMany it will by default try to make it singular by chopping the 's' off of the end.  The result is three new methods.
+
+Let's assume you have defined 'phoneNumbers' as your association.  The three new methods would be:
+
+* __addPhoneNumber(pn)__
+* __getPhoneNumbers(callback)__
+* __removePhoneNumber(pn)__
+
+the add and remove can take a phone number directly. However, getPhoneNumbers() requires a callback which will be passed the result.
+The items passed to add and remove must be persisted before trying to add or remove them.
+
+
 
 
 ## License
