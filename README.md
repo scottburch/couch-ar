@@ -70,7 +70,8 @@ Next, create your domain files in ../testDomain like this:
             fullName: {}
         },
         hasMany: {
-            phoneNumbers: 'PhoneNumber'
+            phoneNumbers: 'PhoneNumber',
+            children: {type: 'Child', singular: 'child'}
         },
         views: {
             firstOrLastName: {map: function(doc) {
@@ -198,7 +199,8 @@ The following example will create a view to find a user by first or last name:
             lastName: {},
         },
         hasMany: {
-           phoneNumbers: 'PhoneNumber'
+           phoneNumbers: 'PhoneNumber',
+           children: {type: 'Child', singular: 'child'}
         },
         views: {
             firstOrLastName: {map: function(doc) {
@@ -217,17 +219,21 @@ This code will also add static finders:
 ## Associations
 
 couch-ar now supports hasMany associations.  To define a hasMany association pass a __hasMany__ in the config as shown above.
-The value 'PhoneNumber' is a previously defined model.
+The value 'PhoneNumber' and 'Child' is a previously defined model.
 
-When you supply a property for hasMany it will by default try to make it singular by chopping the 's' off of the end.  The result is three new methods.
+When you only supply a string then the singular names will be converted by chopping the 's' off the end.
+The result is three new methods.
 
-Let's assume you have defined 'phoneNumbers' as your association.  The three new methods would be:
+Assuming the hasMany definition above the result will be 6 methods:
 
 * __addPhoneNumber(pn)__
 * __getPhoneNumbers(callback)__
 * __removePhoneNumber(pn)__
+* __addChild(c)__
+* __getChildren(callback)__
+* __removeChild(c)__
 
-the add and remove can take a phone number directly. However, getPhoneNumbers() requires a callback which will be passed the result.
+the add and remove can take a phone number directly. However, getters requires a callback which will be passed the result.
 The items passed to add and remove must be persisted before trying to add or remove them.
 
 

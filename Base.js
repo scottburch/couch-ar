@@ -53,14 +53,24 @@ module.exports = function(db, name, config) {
     function configureHasMany() {
 
         Object.keys(config.hasMany || {}).forEach(function(propName){
-            var singularPropName = propName.replace(/(.*)s$/,'$1');
+            var model;
+            var singularPropName;
+            var propDef = config.hasMany[propName];
+
+            if(typeof propDef === 'object') {
+                model = propDef.type && domain[propDef.type];
+                singularPropName = propDef.singular;
+            } else {
+                model = domain[propDef];
+            }
+            singularPropName = singularPropName || propName.replace(/(.*)s$/,'$1');
             var upperPropName = helpers.toUpper(propName);
             var singularUpperPropName = helpers.toUpper(singularPropName);
             var idsArray = that[singularPropName + 'Ids'] = [];
-            var model = domain[config.hasMany[propName]];
             addGetter();
             addAdder();
             addRemover();
+            config.properties[singularPropName + 'Ids'] = {};
 
             function addGetter() {
                 that['get' + upperPropName] = function(cb) {

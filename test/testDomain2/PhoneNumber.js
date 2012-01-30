@@ -1,11 +1,11 @@
 var domain = require('couch-ar');
 
-exports.TestUser = domain.create('PhoneNumber',{
-    dbName: 'couch-ar-test',
+exports.TestUser = domain.create('PhoneNumber', {
+    dbName:'couch-ar-test',
     properties:{
-        number: {}
+        number:{}
     }
-}, function(that) {
+}, function (that) {
 });
 
 

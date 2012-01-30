@@ -10,9 +10,9 @@ domain.create('TestUser',{
         fullName: {}
     },
     hasMany: {
-        phoneNumbers: 'PhoneNumber'
+        phoneNumbers: 'PhoneNumber',
+        children: {type: 'Child', singular: 'child'}
     },
-
     views: {
         firstOrLastName: {map: function(doc) {
             emit(doc.firstName, doc);
@@ -22,7 +22,7 @@ domain.create('TestUser',{
 }, function(that) {
     that.beforeSave = function() {
         that.fullName = that.firstName + ' ' + that.lastName;
-    }
+    };
     return that;
 });
 

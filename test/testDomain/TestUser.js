@@ -10,7 +10,8 @@ domain.create('TestUser',{
         fullName: {}
     },
     hasMany: {
-        phoneNumbers: 'PhoneNumber'
+        phoneNumbers: 'PhoneNumber',
+        children: {type: 'Child', singular: 'child'}
     },
 
     views: {
