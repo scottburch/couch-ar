@@ -93,8 +93,10 @@ exports.create = function(name, config, constr) {
     return exports[name] = exports[config.dbName][name] = factory;
 
     function addFinders() {
-        for (prop in config.properties) {
-            addFinders(prop);
+        for (var prop in config.properties) {
+            if(config.properties[prop].finders !== false) {
+                addFinders(prop);
+            }
         }
         for (view in config.views) {
             addFinders(view);
@@ -198,8 +200,10 @@ exports.create = function(name, config, constr) {
 
 
         for (prop in config.properties) {
-            views[prop] = {
-                map: "function(doc){if(doc.type === '" + name + "') {emit(doc." + prop + ", doc)}}"
+            if(config.properties[prop].finders !== false) {
+                views[prop] = {
+                    map: "function(doc){if(doc.type === '" + name + "') {emit(doc." + prop + ", doc)}}"
+                }
             }
         }
         views.id = {

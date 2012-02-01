@@ -7,7 +7,7 @@ domain.create('TestUser',{
         password: {},
         firstName:{},
         lastName: {},
-        fullName: {}
+        fullName: {finders:false}
     },
     hasMany: {
         phoneNumbers: 'PhoneNumber',
