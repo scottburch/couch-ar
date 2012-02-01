@@ -67,7 +67,7 @@ Next, create your domain files in ../testDomain like this:
             password: {},
             firstName:{},
             lastName: {},
-            fullName: {}
+            fullName: {finders:false}                   // Turns off the creation of finders (findByXXX) for this property
         },
         hasMany: {
             phoneNumbers: 'PhoneNumber',
@@ -139,7 +139,7 @@ List all documents
 
 ## findByXxx() / findAllByXxx()
 
-Every property gets a findBy or findAllBy method.  The usage is pretty simple:
+Every property that does not have a "finders:false" in it's config gets a findBy or findAllBy method.  The usage is pretty simple:
 
     domain.TestUser.findAllByUsername('scott', function(users){ // passed the user objects })
     domain.TestUser.findById('xxxxxx', function(user){})
