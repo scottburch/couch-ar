@@ -253,9 +253,11 @@ describe('couch-ar', function () {
                 });
                 asyncSpecWait();
             });
-
-
         });
+
+        require('./hasOneTests');
+        require('./hasManyTests');
+        require('./propertyTests.js')
     }
 
 });

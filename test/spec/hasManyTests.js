@@ -1,24 +1,9 @@
-var domain;
-
 describe('hasMany', function() {
+    var domain = require('couch-ar');
 
     var user, phoneNumber1, phoneNumber2, phoneNumber3, child1, child2, child3;
 
     beforeEach(function() {
-        domain = require('couch-ar');
-
-        if(domain.TestUser === undefined) {
-            domain.init({
-                    dbName:'couch-ar-test',
-                    root:__dirname + '/../' + 'testDomain'
-                }
-            );
-            waitsFor(function() {
-                return domain.TestUser;
-            });
-        }
-
-        runs(function() {
             user = domain.TestUser.create({});
             phoneNumber1 = domain.PhoneNumber.create({id:'pn1'});
             phoneNumber2 = domain.PhoneNumber.create({id:'pn2'});
@@ -26,7 +11,6 @@ describe('hasMany', function() {
             child1 = domain.Child.create({id:'child1'});
             child2 = domain.Child.create({id:'child2'});
             child3 = domain.Child.create({id:'child3'});
-        });
     });
 
     it('should create "Ids" array', function() {

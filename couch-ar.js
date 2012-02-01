@@ -1,3 +1,4 @@
+var checkLoaded = function() {};
 var domainLoadedCount = 0;
 
 var cradle = require('cradle');
@@ -41,26 +42,18 @@ exports.init = function(config, callback) {
     });
 
     function initDomainConstructors() {
-        var timeout = setTimeout(function() {
-            callback(db);
-        },30000);
 
-        var filenames = fs.readdirSync(config.root).reduce(function(out, filename) {
-            /\.js$/.test(filename) && out.push(filename);
-            return out;
-        },[]);
+        checkLoaded = function() {
+            if(!domainLoadedCount) {
+                callback(db);
+            }
+        }
+
+        var filenames = fs.readdirSync(config.root);
         filenames.forEach(function(filename) {
-            require(config.root + '/' + filename)
+            /\.js$/.test(filename) && require(config.root + '/' + filename)  && domainLoadedCount ++;
         });
 
-        (function checkLoaded() {
-            if(domainLoadedCount === filenames.length) {
-                clearTimeout(timeout);
-                callback(db);
-            } else {
-                setTimeout(checkLoaded, 100);
-            }
-        }());
     }
 }
 
@@ -87,10 +80,9 @@ exports.create = function(name, config, constr) {
     addCreateMethod();
     addViews(function() {
         addFinders();
-        domainLoadedCount++;
+        domainLoadedCount--;
+        checkLoaded();
     });
-
-
 
     factory.addView = function() {
         addView.apply(factory, arguments);

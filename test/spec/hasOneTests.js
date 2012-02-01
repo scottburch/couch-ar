@@ -1,27 +1,11 @@
-var ar = require('couch-ar');
-
-describe('hasMany', function() {
+describe('hasOne', function() {
+    var ar = require('couch-ar');
 
     var user, phoneNumber;
 
     beforeEach(function() {
-        ar = require('couch-ar');
-
-        if(ar.TestUser === undefined) {
-            ar.init({
-                    dbName:'couch-ar-test',
-                    root:__dirname + '/../' + 'testDomain'
-                }
-            );
-            waitsFor(function() {
-                return ar.TestUser;
-            });
-        }
-
-        runs(function() {
-            user = ar.TestUser.create({});
-            phoneNumber = ar.PhoneNumber.create({id:'pn1'});
-        });
+        user = ar.TestUser.create({});
+        phoneNumber = ar.PhoneNumber.create({id:'pn1'});
     });
 
     describe('hasOne setter', function() {
