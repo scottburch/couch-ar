@@ -43,11 +43,14 @@ exports.init = function(config, callback) {
     function initDomainConstructors() {
         var timeout = setTimeout(function() {
             callback(db);
-        },60000);
+        },30000);
 
-        var filenames = fs.readdirSync(config.root);
+        var filenames = fs.readdirSync(config.root).reduce(function(out, filename) {
+            /\.js$/.test(filename) && out.push(filename);
+            return out;
+        },[]);
         filenames.forEach(function(filename) {
-            /\.js$/.test(filename) && require(config.root + '/' + filename)
+            require(config.root + '/' + filename)
         });
 
         (function checkLoaded() {
