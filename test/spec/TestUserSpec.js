@@ -28,8 +28,7 @@ describe('couch-ar', function () {
                         port:testConfig.port
                     },
                     function () {
-                        // delay so that everything can be setup
-                        setTimeout(asyncSpecDone, 500);
+                        asyncSpecDone()
                     }
                 );
                 asyncSpecWait();
