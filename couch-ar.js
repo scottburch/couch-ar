@@ -1,3 +1,5 @@
+var domainLoadedCount = 0;
+
 var cradle = require('cradle');
 var fs = require('fs');
 var Base = require('./Base');
@@ -39,12 +41,26 @@ exports.init = function(config, callback) {
     });
 
     function initDomainConstructors() {
-        fs.readdirSync(config.root).forEach(function(filename) {
+        var timeout = setTimeout(function() {
+            callback(db);
+        },60000);
+
+        var filenames = fs.readdirSync(config.root);
+        filenames.forEach(function(filename) {
             /\.js$/.test(filename) && require(config.root + '/' + filename)
         });
-        callback(db);
+
+        (function checkLoaded() {
+            if(domainLoadedCount === filenames.length) {
+                clearTimeout(timeout);
+                callback(db);
+            } else {
+                setTimeout(checkLoaded, 100);
+            }
+        }());
     }
 }
+
 
 /**
  * Create a domain constructor.  Use this in each domain file
@@ -65,12 +81,12 @@ exports.create = function(name, config, constr) {
     }
 
     // Run all of the creators
-    addCreateMethod(function() {
-        addViews(function() {
-            addFinders(function() {
-            });
-        });
+    addCreateMethod();
+    addViews(function() {
+        addFinders();
+        domainLoadedCount++;
     });
+
 
 
     factory.addView = function() {
@@ -81,7 +97,7 @@ exports.create = function(name, config, constr) {
     exports[config.dbName] = exports[config.dbName] || {};
     return exports[name] = exports[config.dbName][name] = factory;
 
-    function addFinders(callback) {
+    function addFinders() {
         for (prop in config.properties) {
             addFinders(prop);
         }
@@ -90,7 +106,6 @@ exports.create = function(name, config, constr) {
         }
         addFinders('id');
         addList();
-        callback();
 
 
         function addFinders(finderName) {
@@ -206,7 +221,7 @@ exports.create = function(name, config, constr) {
     /**
      * Add the create() static method to the factory
      */
-    function addCreateMethod(callback) {
+    function addCreateMethod() {
         factory.create = function(props) {
             var obj = factory();
             for (var n in props) {
@@ -217,7 +232,6 @@ exports.create = function(name, config, constr) {
             obj.rev = obj.rev || props._rev || props.rev;
             return obj;
         }
-        callback && callback();
     }
 
 }
