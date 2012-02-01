@@ -9,6 +9,7 @@ module.exports = function(db, name, config) {
     var that = {};
 
     configureHasMany();
+    configureHasOne();
 
 
     that.serialize = function() {
@@ -49,6 +50,36 @@ module.exports = function(db, name, config) {
         }
     }
     return that;
+
+    function configureHasOne() {
+        Object.keys(config.hasOne || {}).forEach(function(propName) {
+            var model = domain[config.hasOne[propName]];
+            var upperPropName = helpers.toUpper(propName);
+            var idProp = propName + 'Id';
+            addSetter();
+            addGetter();
+
+
+            function addSetter() {
+                that['set' + upperPropName] = function(it) {
+                    if(it && (it.id === undefined)) {
+                        throw 'Can not set non-persisted entity to hasOne';
+                    }
+                    that[idProp] = it && it.id;
+                }
+            }
+
+            function addGetter() {
+                that['get' + upperPropName] = function(cb) {
+                    if(that[idProp] !== undefined) {
+                        model.findById(that[idProp], cb);
+                    } else {
+                        cb(undefined);
+                    }
+                }
+            }
+        });
+    }
 
     function configureHasMany() {
 

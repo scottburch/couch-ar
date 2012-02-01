@@ -13,6 +13,9 @@ domain.create('TestUser',{
         phoneNumbers: 'PhoneNumber',
         children: {type: 'Child', singular: 'child'}
     },
+    hasOne: {
+        homePhoneNumber: 'PhoneNumber'
+    },
     views: {
         firstOrLastName: {map: function(doc) {
             emit(doc.firstName, doc);
