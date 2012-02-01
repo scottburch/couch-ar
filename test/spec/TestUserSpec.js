@@ -29,8 +29,7 @@ describe('couch-ar', function () {
                     },
                     function () {
                         // delay so that everything can be setup
-//                        setTimeout(asyncSpecDone, 500);
-                        asyncSpecDone();
+                        setTimeout(asyncSpecDone, 100);
                     }
                 );
                 asyncSpecWait();
