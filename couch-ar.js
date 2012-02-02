@@ -51,7 +51,7 @@ exports.init = function(config, callback) {
 
         var filenames = fs.readdirSync(config.root);
         filenames.forEach(function(filename) {
-            /\.js$/.test(filename) && require(config.root + '/' + filename)  && domainLoadedCount ++;
+            /\.js$/.test(filename) && require(config.root + '/' + filename)  && domainLoadedCount++;
         });
 
     }
@@ -81,6 +81,7 @@ exports.create = function(name, config, constr) {
     addViews(function() {
         addFinders();
         domainLoadedCount--;
+console.log('xxxx:'+domainLoadedCount);
         checkLoaded();
     });
 
