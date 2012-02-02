@@ -81,7 +81,6 @@ exports.create = function(name, config, constr) {
     addViews(function() {
         addFinders();
         domainLoadedCount--;
-console.log('xxxx:'+domainLoadedCount);
         checkLoaded();
     });
 
