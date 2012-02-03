@@ -1,12 +1,10 @@
-var checkLoaded = function() {};
-var domainLoadedCount = 0;
-
 var cradle = require('cradle');
 var fs = require('fs');
 var Base = require('./Base');
 var helpers = require('./helpers');
 var databases = {}
 var defaultDbName;
+var defaultTimeout = 30;
 
 /**
  * initialize the DB and create constructor factories
@@ -16,7 +14,9 @@ var defaultDbName;
 
 exports.init = function(config, callback) {
     var db;
-    defaultDbName = config.dbName
+    var timer;
+    var timeout = typeof config['timeout'] != undefined ? config.timeout : defaultTimeout;
+    defaultDbName = config.dbName;
     callback = callback || function() {
     };
     config.connectionOptions = config.connectionOptions || {};
@@ -42,18 +42,26 @@ exports.init = function(config, callback) {
     });
 
     function initDomainConstructors() {
-
-        checkLoaded = function() {
-            if(!domainLoadedCount) {
-                callback(db);
+        db.domainsToLoad = 0;
+        db.checkDomainsLoaded = function() {
+            if(this.domainsToLoad == 0) {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                callback(/* null, */ db);
             }
         }
 
         var filenames = fs.readdirSync(config.root);
         filenames.forEach(function(filename) {
-            /\.js$/.test(filename) && require(config.root + '/' + filename)  && domainLoadedCount ++;
+            /\.js$/.test(filename) && require(config.root + '/' + filename)  && db.domainsToLoad ++;
         });
-
+        if (timeout) {
+            timer = setTimeout(function(){
+                console.log('Timed out initializing domains.');
+                callback(/* err, */ db);
+            }, timeout * 1000);
+        }
     }
 }
 
@@ -80,8 +88,8 @@ exports.create = function(name, config, constr) {
     addCreateMethod();
     addViews(function() {
         addFinders();
-        domainLoadedCount--;
-        checkLoaded();
+        db.domainsToLoad--;
+        db.checkDomainsLoaded();
     });
 
     factory.addView = function() {
