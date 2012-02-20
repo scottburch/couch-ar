@@ -35,7 +35,11 @@ module.exports = function(db, name, config) {
                 that.id = res.id;
                 that.rev = res.rev
             }
-            callback(err, res);
+            if(err) {
+                callback(err, res);
+            } else {
+                that.afterSave ? that.afterSave(res, callback) : callback(err, res);
+            }
         });
     }
 

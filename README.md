@@ -82,7 +82,12 @@ Next, create your domain files in ../testDomain like this:
     }, function(that) {
         this.beforeSave = function() {
             that.fullName = that.firstName + ' ' + that.lastName;
-        }
+        },
+        that.afterSave = function(res, callback) {
+            // do something and callback with (err, res)
+            callback(undefined, res);
+        };
+
         return that;
     });
 
@@ -105,6 +110,10 @@ After running init() the domain constructors are available from the couch-ar obj
 
 domain constructors can include a hook beforeSave() that will be run before a document
 is saved or updated in the DB.
+
+## After Hooks
+
+domain constructors can include a hook afterSave(res, cb) that will run after a document is saved.  See the previous example for the format.
 
 
 ## create()

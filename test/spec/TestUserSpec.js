@@ -58,6 +58,19 @@ describe('couch-ar', function () {
                     asyncSpecWait();
                 });
 
+                it('should have called afterSave after saving and before calling the callback', function() {
+                        expect(user.afterSaveRun).toBe(true);
+                });
+
+                it('should call afterSave method after writing to the db', function() {
+                    domain.TestUser.findByUsername('tester1', function(u) {
+                        expect(u.afterSaveRun).toBe(undefined);
+                        asyncSpecDone();
+                    });
+                    asyncSpecWait();
+                });
+
+
                 it('should allow us to create more than one', function () {
                     var u = domain.TestUser.create({username:'tester2', firstName:'Test2', lastName:'Tester2', dbName:testConfig.domainDbName});
                     u.save(function (err, res) {
@@ -96,6 +109,7 @@ describe('couch-ar', function () {
                     })
                     asyncSpecWait();
                 });
+
             });
 
             describe('findByUsername() method', function () {
