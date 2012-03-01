@@ -143,7 +143,7 @@ exports.create = function(name, config, constr) {
         if (Array.isArray(value)) {
             options.startkey = JSON.stringify(value[0]);
             options.endkey = JSON.stringify(value[1]);
-        } else if (typeof(value) = 'object'){
+        } else if (typeof(value) == 'object'){
           options = value;
         } else {
             options.key = JSON.stringify(value);
