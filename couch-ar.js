@@ -141,8 +141,10 @@ exports.create = function(name, config, constr) {
     function executeView(viewName, value, callback) {
         var options = {};
         if (Array.isArray(value)) {
-            options.startKey = JSON.stringify(value[0]);
-            options.endKey = JSON.stringify(value[1]);
+            options.startkey = JSON.stringify(value[0]);
+            options.endkey = JSON.stringify(value[1]);
+        } else if (typeof(value) == 'object') {
+            options = value;
         } else {
             options.key = JSON.stringify(value);
         }
