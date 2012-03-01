@@ -26,6 +26,13 @@ domain.create('TestUser',{
     this.beforeSave = function() {
         that.fullName = that.firstName + ' ' + that.lastName;
     }
+    that.afterSave = function(res, callback) {
+        setTimeout(function() {
+            that.afterSaveRun = true;
+            callback(undefined, res);
+        },200);
+    };
+
 });
 
 
