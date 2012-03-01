@@ -31,11 +31,15 @@ module.exports = function(db, name, config) {
         that.dateCreated = that.dateCreated || new Date();
         that.lastUpdated = new Date();
         db.save(that.id, that.serialize(), function(err, res) {
-            if (res.ok) {
+            if (res && res.ok) {
                 that.id = res.id;
                 that.rev = res.rev
             }
-            callback(err, res);
+            if(err) {
+                callback(err, res);
+            } else {
+                that.afterSave ? that.afterSave(res, callback) : callback(err, res);
+            }
         });
     }
 

@@ -22,9 +22,9 @@ exports.init = function(config, callback) {
     config.connectionOptions = config.connectionOptions || {};
 
     if (config.host && config.port) {
-      db = new(cradle.Connection)(config.host, config.port, config.connectionOptions).database(config.dbName);
+        db = new(cradle.Connection)(config.host, config.port, config.connectionOptions).database(config.dbName);
     } else {
-      db = new cradle.Connection().database(config.dbName);
+        db = new cradle.Connection().database(config.dbName);
     }
 
     databases[config.dbName] = db;

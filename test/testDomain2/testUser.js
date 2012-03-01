@@ -7,7 +7,8 @@ domain.create('TestUser',{
         password: {},
         firstName:{},
         lastName: {},
-        fullName: {finders:false}
+        fullName: {finders:false},
+        afterSaveRun: {}
     },
     hasMany: {
         phoneNumbers: 'PhoneNumber',
@@ -25,6 +26,13 @@ domain.create('TestUser',{
 }, function(that) {
     that.beforeSave = function() {
         that.fullName = that.firstName + ' ' + that.lastName;
+    };
+
+    that.afterSave = function(res, callback) {
+        setTimeout(function() {
+            that.afterSaveRun = true;
+            callback(undefined, res);
+        },200);
     };
     return that;
 });
