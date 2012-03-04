@@ -60,6 +60,7 @@ module.exports = function(db, name, config) {
             var model = domain[config.hasOne[propName]];
             var upperPropName = helpers.toUpper(propName);
             var idProp = propName + 'Id';
+            config.properties[idProp] = {};
             addSetter();
             addGetter();
 
