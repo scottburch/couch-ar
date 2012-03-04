@@ -130,6 +130,17 @@ describe('couch-ar', function () {
                         expect(user).not.toBeDefined();
                     });
                 });
+
+            });
+
+            describe('findAllByUsername() method', function() {
+                it('should find user when using findByUsername with a good range', function() {
+                        domain.TestUser.findAllByUsername(['a','Z'], function(users) {
+                            expect(users.length).toBe(2);
+                            asyncSpecDone();
+                        });
+                    asyncSpecWait();
+                });
             });
 
             describe('findById() method', function () {
@@ -158,17 +169,6 @@ describe('couch-ar', function () {
                 });
                 asyncSpecWait();
             });
-
-
-            describe('findAllByDateCreated()', function () {
-                it('should return docs', function () {
-                    domain.TestUser.findAllByDateCreated(['a', 'Z'], function (users) {
-                        expect(users.length).toEqual(2);
-                        asyncSpecDone();
-                    })
-                    asyncSpecWait();
-                })
-            })
 
 
             describe('custom views', function () {
