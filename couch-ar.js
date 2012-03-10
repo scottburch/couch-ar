@@ -35,9 +35,11 @@ exports.init = function(config, callback) {
                 initDomainConstructors();
             });
         } else {
-            db.viewCleanup();
-            db.compact();
-            initDomainConstructors();
+            db.viewCleanup(function() {
+                db.compact(function() {
+                    initDomainConstructors();
+                });
+            });
         }
     });
 
@@ -130,8 +132,8 @@ exports.create = function(name, config, constr) {
 
         function addList() {
             factory.list = function(callback) {
-                var url = ['_design/',name,'/_view/id'].join('');
-                db.query('GET', url, function(err, res) {
+                var url = [name,'id'].join('/');
+                db.view(url, function(err, res) {
                     callback(instantiateResults(res));
                 })
             }
@@ -141,16 +143,16 @@ exports.create = function(name, config, constr) {
     function executeView(viewName, value, callback) {
         var options = {};
         if (Array.isArray(value)) {
-            options.startkey = JSON.stringify(value[0]);
-            options.endkey = JSON.stringify(value[1]);
+            options.startkey = value[0];
+            options.endkey = value[1];
         } else if (typeof(value) == 'object') {
             options = value;
         } else {
-            options.key = JSON.stringify(value);
+            options.key = value;
         }
 
-        var url = ['_design/', name, '/_view/', viewName].join('');
-        db.query('GET', url, options, function(err, res) {
+        var url = [name, viewName].join('/');
+        db.view(url, options, function(err, res) {
             err && console.log(err);
             callback(err ? [] : instantiateResults(res));
         });
