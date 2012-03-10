@@ -1,9 +1,9 @@
 {
   "name": "couch-ar",
   "description": "active record for CouchDB",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "homepage": "https://github.com/scottburch/couch-ar",
-  "dependencies": {"cradle": ">=0.5.5"},
+  "dependencies": {"cradle": ">=0.6.3"},
   "author": {
     "name": "Scott Burch",
     "email": "scott@bulldoginfo.com"
@@ -15,7 +15,7 @@
   "engines": {
     "node": ">=0.4.7"
   },
-  "_id": "couch-ar@0.3.3",
+  "_id": "couch-ar@0.3.4",
   "_nodeSupported": true,
   "_npmVersion": "1.0.6",
   "_nodeVersion": "v0.4.8",
