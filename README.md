@@ -1,8 +1,10 @@
 # couch-ar is a thin active record implementation for couchDB
 
-## Important Note
+## Important Notes
 Previous versions of couch-ar included a bug that would cause the domain constructor finder methods not to work if you restarted the server.
 This appears to be due to a bug in newer versions of CouchDB.  I am not sure when it appeared, but I have modified the code to deal with it.
+
+couch-ar appears to be broken with the newer version of cradle.  Since couch-ar relys on cradle, and they changed their API, please use an older version until this can be resolved.
 
 ## Motivation
 
